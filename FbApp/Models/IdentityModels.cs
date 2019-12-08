@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -16,9 +17,9 @@ namespace FbApp.Models
 
         public string Country { get; set; }
 
-        // public Photo ProfilePhoto { get; set; }
+     //   public Photo ProfilePhoto { get; set; }
 
-        //public ICollection<Album> Albums { get; set; }
+        public ICollection<Album> Albums { get; set; }
 
         public ApplicationUser() : base()
         {
@@ -41,6 +42,9 @@ namespace FbApp.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         public static ApplicationDbContext Create()
         {
