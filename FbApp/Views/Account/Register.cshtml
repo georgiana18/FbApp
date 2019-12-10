@@ -55,8 +55,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @*@Html.(model => model.ProfilePhoto, new { htmlAttributes = new { @type = "file", @class = "form-control" } })*@
-            <input type="file" name="ProfilePhoto" class="form-control"/>
+            @*<input type="file" formenctype="multipart/form-data" name="ProfilePhoto" class="form-control"/>*@
         </div>
     </div>
 

@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FbApp.Models;
+using FbApp.Services;
 
 namespace FbApp.Controllers
 {
@@ -15,16 +16,18 @@ namespace FbApp.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
+        private IPhotoService _photoService;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager applicationRoleManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager applicationRoleManager, IPhotoService photoService)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             RoleManager = applicationRoleManager;
+            _photoService = photoService; 
         }
 
         public ApplicationRoleManager RoleManager
@@ -165,7 +168,7 @@ namespace FbApp.Controllers
                                                  FirstName = model.FirstName,
                                                  LastName = model.LastName,
                                                  Age = model.Age,
-                                                 ProfilePicture = this.photoService.PhotoAsBytes(model.Photo)
+                                                 ProfilePicture = this._photoService.PhotoAsBytes(model.ProfilePhoto)
                                                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

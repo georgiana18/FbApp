@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,13 @@ namespace FbApp.Services
 
         public byte[] PhotoAsBytes(IFormFile photo)
         {
-            throw new NotImplementedException();
+            byte[] photoAsBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                photo.CopyTo(memoryStream);
+                photoAsBytes = memoryStream.ToArray();
+            }
+            return photoAsBytes; 
         }
 
         public bool PhotoExists(int photoId)
