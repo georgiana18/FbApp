@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FbApp.Utilities.CustomValidationAttributes;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -71,6 +73,16 @@ namespace FbApp.Models
         public string Email { get; set; }
 
         [Required]
+        [Display(Name ="First Name")]
+        [MinLength(2), MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        [MinLength(2), MaxLength(50)]
+        public string LastName { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -81,14 +93,13 @@ namespace FbApp.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string Gender { get; set; }
+        [Required]
+        [Age]
+        public int Age { get; set; }       
 
-        [DataType(DataType.Date)]
-        [Required(ErrorMessage = "Date of birth is mandatory")]
-        public DateTime DateOfBirth { get; set; }
-
-        [Required(ErrorMessage = "Country is mandatory")]
-        public string Country { get; set; }
+        [Required]
+        [Display(Name = "Upload a profile photo")]
+        public IFormFile ProfilePhoto { get; set; } 
     }
 
     public class ResetPasswordViewModel

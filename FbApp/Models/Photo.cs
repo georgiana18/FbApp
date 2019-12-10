@@ -4,9 +4,12 @@
     {
         public int Id { get; set; }
 
+        public byte[] Image { get; set; }
+
         public int AlbumId { get; set; }
-       // public int UserId { get; set; }
+      
+        // public int UserId { get; set; }
         public virtual Album Album { get; set; }
-       // public virtual ApplicationUser User { get; set; }
+        // public virtual ApplicationUser User { get; set; }
     }
 }

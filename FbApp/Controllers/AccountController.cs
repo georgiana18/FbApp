@@ -144,6 +144,7 @@ namespace FbApp.Controllers
 
 
         // GET: /Account/Register
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -159,7 +160,14 @@ namespace FbApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email,
+                                                 Email = model.Email,
+                                                 FirstName = model.FirstName,
+                                                 LastName = model.LastName,
+                                                 Age = model.Age,
+                                                 ProfilePicture = this.photoService.PhotoAsBytes(model.Photo)
+                                                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
