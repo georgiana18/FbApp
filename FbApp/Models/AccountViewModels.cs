@@ -96,11 +96,10 @@ namespace FbApp.Models
 
         [Required]
         [Age]
-        public int Age { get; set; }       
+        public int Age { get; set; }
 
-        [Required]
         [Display(Name = "Upload a profile photo")]
-        public IFormFile ProfilePhoto { get; set; } 
+        public byte[] ProfilePhoto { get; set; }
     }
 
     public class ResetPasswordViewModel

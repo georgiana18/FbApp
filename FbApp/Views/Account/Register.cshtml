@@ -5,7 +5,7 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal text-center", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal text-center", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
@@ -55,7 +55,9 @@
     <div class="form-group">
         @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @*<input type="file" formenctype="multipart/form-data" name="ProfilePhoto" class="form-control"/>*@
+
+            <input type="file" name="ProfilePhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+
         </div>
     </div>
 

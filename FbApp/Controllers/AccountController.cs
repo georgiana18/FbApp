@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FbApp.Models;
-using FbApp.Services;
+using System.IO;
 
 namespace FbApp.Controllers
 {
@@ -16,18 +16,16 @@ namespace FbApp.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
-        private IPhotoService _photoService;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager applicationRoleManager, IPhotoService photoService)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager applicationRoleManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             RoleManager = applicationRoleManager;
-            _photoService = photoService; 
         }
 
         public ApplicationRoleManager RoleManager
@@ -159,17 +157,29 @@ namespace FbApp.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register([Bind(Exclude = "ProfilePhoto")]  RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email,
-                                                 Email = model.Email,
-                                                 FirstName = model.FirstName,
-                                                 LastName = model.LastName,
-                                                 Age = model.Age,
-                                                 ProfilePicture = this._photoService.PhotoAsBytes(model.ProfilePhoto)
-                                                };
+                byte[] imageData = null;
+                if (Request.Files.Count > 0)
+                {
+                    HttpPostedFileBase poImgFile = Request.Files["ProfilePhoto"];
+                    using (var binary = new BinaryReader(poImgFile.InputStream))
+                    {
+                        imageData = binary.ReadBytes(poImgFile.ContentLength);
+                    }
+                }
+
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Age = model.Age,
+                    ProfilePicture = imageData
+                };
 
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

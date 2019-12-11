@@ -23,8 +23,8 @@ namespace FbApp.Models
         [Range(DataConstants.MinUserAge, DataConstants.MaxUserAge)]
         public int Age { get; set; }
 
-        [Required]
-        [MaxLength(DataConstants.MaxPhotoLength)]
+        //[Required]
+        //[MaxLength(DataConstants.MaxPhotoLength)]
         public byte[] ProfilePicture { get; set; }
 
         public ICollection<Album> Albums { get; set; }
