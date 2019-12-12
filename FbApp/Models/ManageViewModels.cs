@@ -13,9 +13,20 @@ namespace FbApp.Models
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
 
+        [Display(Name ="Edit your email address:")]
+        public string Email { get; set; }
+
+        [Display(Name ="Edit your first name:")]
+        public string FirstName { get; set; }
+
+        [Display(Name ="Edit your last name: ")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Edit your age:")]
+        public int Age { get; set; }
+
         [Display(Name = "Edit your profile photo:")]
         public byte[] ProfilePhoto { get; set; }
-
     }
 
     public class ManageLoginsViewModel

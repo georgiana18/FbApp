@@ -28,14 +28,38 @@
     {
         <div class="form-group">
             @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
-             <div class="col-md-10">
-                 <input type="file" name="ProfilePhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                 <input type="submit" value="Save" formmethod="post" class="btn btn-default" />
+            <div class="col-md-10">
+                <input type="file" name="ProfilePhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                <br/>
+                <input type="submit" value="Save" formmethod="post" class="btn btn-sm btn-success" />
             </div>
         </div>
     }
-        
 
+    @using (Html.BeginForm("UpdateProfileInfo", "Manage", new { @class = "form-horizontal" }))
+    {
+        @Html.HttpMethodOverride(HttpVerbs.Put);
+
+        <br />
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @name = "FirstName" })
+        @Html.HiddenFor(m => m.FirstName)
+        <br />
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @name = "LastName" })
+        @Html.HiddenFor(m => m.LastName)
+        <br />
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @name = "E-mail" })
+        @Html.HiddenFor(m => m.Email)
+        <br />
+        @Html.LabelFor(m => m.Age, new { @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.Age, new { @type = "number", @min = "0", @max = "130", @step = "1", @class = "form-control", @name = "Age" })
+        @Html.HiddenFor(m => m.Age)
+        <br />
+        <button class="btn btn-sm btn-success" type="submit">Modifica informatii profil</button>
+    }
+    <br />
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>

@@ -34,9 +34,9 @@ namespace FbApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -66,6 +66,8 @@ namespace FbApp.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -73,7 +75,11 @@ namespace FbApp.Controllers
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
-                ProfilePhoto = UserManager.FindById(userId).ProfilePicture
+                ProfilePhoto = user.ProfilePicture,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Age = user.Age,
+                Email = user.Email
             };
             return View(model);
         }
@@ -106,6 +112,38 @@ namespace FbApp.Controllers
             catch (Exception e)
             {
                 Response.Write(e.Message);
+                return View(user);
+            }
+        }
+
+        [HttpPut]
+        public ActionResult UpdateProfileInfo(ApplicationUser edited_user)
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (TryUpdateModel(user))
+                    {
+                        user.FirstName = edited_user.FirstName;
+                        user.LastName = edited_user.LastName;
+                        user.Email = edited_user.Email;
+                        user.Age = edited_user.Age;
+
+                        db.SaveChanges();
+                        UserManager.Update(user);
+                        TempData["message"] = "Articolul a fost modificat!";
+                    }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(user);
+                }
+            }
+            catch (Exception e)
+            {
                 return View(user);
             }
         }
@@ -367,8 +405,8 @@ namespace FbApp.Controllers
 
             base.Dispose(disposing);
         }
-        
-#region Helpers
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -419,6 +457,6 @@ namespace FbApp.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
