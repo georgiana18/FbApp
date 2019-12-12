@@ -24,24 +24,17 @@
         </dd>
     </dl>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-
-            <input type="file" name="ProfilePicture" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-
-        </div>
-    </div>
-
-    <div>
+    @using (Html.BeginForm("UpdateProfilePicture", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+    {
         <div class="form-group">
-            @*@Html.ActionLink("Save Profile Picture", "UpdateProfilePicture")*@
-            <div class="col-md-offset-2 col-md-10"  style="margin-bottom: 20px;">
-                    <input type="submit" value="Save" formmethod="post" class="btn btn-default"
-                           onclick="location.href='@Url.Action("UpdateProfilePicture", "Manage")'"/>
+            @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
+             <div class="col-md-10">
+                 <input type="file" name="ProfilePhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
+                 <input type="submit" value="Save" formmethod="post" class="btn btn-default" />
             </div>
         </div>
-    </div>
+    }
+        
 
     <dl class="dl-horizontal">
         <dt>Password:</dt>
