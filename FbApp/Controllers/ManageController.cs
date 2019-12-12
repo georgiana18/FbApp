@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FbApp.Models;
+using System.IO;
 
 namespace FbApp.Controllers
 {
@@ -15,6 +16,7 @@ namespace FbApp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = ApplicationDbContext.Create();
 
         public ManageController()
         {
@@ -73,6 +75,41 @@ namespace FbApp.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult UpdateProfilePicture()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        //POST: /Manage/UpdateProfilePicture
+        public ActionResult UpdateProfilePicture(HttpPostedFileBase photo)
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            try
+            {
+                if (TryUpdateModel(user))
+                {
+                    byte[] imageData = null;
+                    if (Request.Files.Count > 0)
+                    {
+                        using (var binary = new BinaryReader(photo.InputStream))
+                        {
+                            imageData = binary.ReadBytes(photo.ContentLength);
+                        }
+                    }
+                    user.ProfilePicture = imageData;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                Response.Write(e.Message);
+                return View(user);
+            }
         }
 
         //
@@ -332,7 +369,7 @@ namespace FbApp.Controllers
 
             base.Dispose(disposing);
         }
-
+        
 #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

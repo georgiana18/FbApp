@@ -423,6 +423,9 @@ namespace FbApp.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
+            string userId = User.Identity.GetUserId(); 
+
+
             return View();
         }
 
