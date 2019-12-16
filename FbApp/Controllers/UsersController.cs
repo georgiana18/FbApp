@@ -1,4 +1,6 @@
 ﻿using FbApp.Models;
+using FbApp.Services;
+using FbApp.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -11,7 +13,17 @@ namespace FbApp.Controllers
 {
     public class UsersController : Controller
     {
-        private ApplicationDbContext db = ApplicationDbContext.Create();
+
+        private readonly IUserService userService;
+        private readonly ApplicationDbContext db;
+
+        public UsersController(IUserService userService, ApplicationDbContext db)
+        {
+            this.userService = userService;
+            this.db = db;
+        }
+
+
         // GET: Users
         public ActionResult Index()
         {
@@ -70,6 +82,26 @@ namespace FbApp.Controllers
             }
         }
 
+        public ActionResult AccountDetails(string id, int? page)
+        {
+            //could be optimized
+            if (User.Identity.GetUserId() == id)
+            {
+                ViewData[GlobalConstants.Authorization] = GlobalConstants.FullAuthorization;
+            }
+            else if (this.userService.CheckIfFriends(User.Identity.GetUserId(), id))
+            {
+                ViewData[GlobalConstants.Authorization] = GlobalConstants.FriendAuthorization;
+            }
+            else
+            {
+                ViewData[GlobalConstants.Authorization] = GlobalConstants.NoAuthorization;
+            }
+
+            UserAccountModel user = this.userService.UserDetails(id, page ?? 1, PageSize);
+
+            return View(user);
+        }
 
 
         [NonAction]

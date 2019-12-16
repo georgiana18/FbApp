@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace FbApp.Utilities
+﻿namespace FbApp.Utilities
 {
     public class DataConstants
     {

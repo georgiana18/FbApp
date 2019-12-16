@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
@@ -23,11 +22,15 @@ namespace FbApp.Models
         [Range(DataConstants.MinUserAge, DataConstants.MaxUserAge)]
         public int Age { get; set; }
 
-        //[Required]
-        //[MaxLength(DataConstants.MaxPhotoLength)]
         public byte[] ProfilePicture { get; set; }
 
-        public ICollection<Album> Albums { get; set; }
+        public bool IsDeleted { get; set; } = false;
+
+        public ICollection<Post> Albums { get; set; } = new List<Post>();
+
+        public ICollection<FriendRequest> FriendRequestSent { get; set; } = new List<FriendRequest>();
+
+        public ICollection<FriendRequest> FriendRequestReceived { get; set; } = new List<FriendRequest>();
 
         public ApplicationUser() : base()
         {
@@ -50,8 +53,17 @@ namespace FbApp.Models
         {
         }
 
-        public DbSet<Album> Albums { get; set; }
+        public DbSet<Post> Posts { get; set; }
+
         public DbSet<Photo> Photos { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+
+        public DbSet<UserFriend> UserFriends { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
 
         public static ApplicationDbContext Create()
         {

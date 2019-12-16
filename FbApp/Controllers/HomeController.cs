@@ -1,8 +1,8 @@
 ﻿using FbApp.Models;
+using FbApp.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -14,21 +14,18 @@ namespace FbApp.Controllers
     {
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            if (this.User.IsInRole(GlobalConstants.AdminRole))
+            {
+                return RedirectToAction("Index", "Home", new { area = GlobalConstants.AdminArea });
+            }
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Users");
+            }
         }
 
         public FileContentResult UserPhotos()
