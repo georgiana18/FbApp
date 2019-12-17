@@ -1,4 +1,6 @@
-﻿namespace FbApp.Services
+﻿using FbApp.Models;
+
+namespace FbApp.Services
 {
     public interface IUserService
     {
@@ -7,5 +9,7 @@
         void MakeFriends(string senderId, string receiverId);
 
         bool CheckIfFriends(string requestUserId, string targetUserId);
+
+        UserAccountModel UserDetails(string userId);
     }
 }

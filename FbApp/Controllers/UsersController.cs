@@ -17,6 +17,12 @@ namespace FbApp.Controllers
         private readonly IUserService userService;
         private readonly ApplicationDbContext db;
 
+        public UsersController()
+        {
+            db = new ApplicationDbContext();
+            userService = new UserService(db);
+        }
+
         public UsersController(IUserService userService, ApplicationDbContext db)
         {
             this.userService = userService;
@@ -34,6 +40,7 @@ namespace FbApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -45,6 +52,7 @@ namespace FbApp.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id, ApplicationUser newData)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -82,14 +90,15 @@ namespace FbApp.Controllers
             }
         }
 
-        public ActionResult AccountDetails(string id, int? page)
+        public ActionResult AccountDetails(string id)
         {
             //could be optimized
-            if (User.Identity.GetUserId() == id)
+            string requestUserId = User.Identity.GetUserId();
+            if (requestUserId == id || User.IsInRole("Administrator"))
             {
                 ViewData[GlobalConstants.Authorization] = GlobalConstants.FullAuthorization;
             }
-            else if (this.userService.CheckIfFriends(User.Identity.GetUserId(), id))
+            else if (this.userService.CheckIfFriends(requestUserId, id))
             {
                 ViewData[GlobalConstants.Authorization] = GlobalConstants.FriendAuthorization;
             }
@@ -98,7 +107,7 @@ namespace FbApp.Controllers
                 ViewData[GlobalConstants.Authorization] = GlobalConstants.NoAuthorization;
             }
 
-            UserAccountModel user = this.userService.UserDetails(id, page ?? 1, PageSize);
+            UserAccountModel user = this.userService.UserDetails(id);
 
             return View(user);
         }
@@ -122,4 +131,6 @@ namespace FbApp.Controllers
             return selectList;
         }
     }
+
+
 }

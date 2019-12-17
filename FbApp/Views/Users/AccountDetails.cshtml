@@ -1,0 +1,57 @@
+﻿@model FbApp.Models.UserAccountModel
+@using FbApp.Utilities
+
+<h2>AccountDetails</h2>
+
+<div>
+    <h4>UserAccountModel</h4>
+    <hr />
+    @if (ViewData[GlobalConstants.Authorization].ToString() == GlobalConstants.FullAuthorization)
+    {
+        <p> "Full Authorization" </p>
+    }
+    else if (ViewData[GlobalConstants.Authorization].ToString() == GlobalConstants.FriendAuthorization)
+    {
+        <p>"Friend Authorization" </p>
+    }
+    else
+    {
+        <p> No Authorization </p>
+        @*<div class="panel-footer">
+       
+            <a class="btn btn-sm btn-success" href="/FriendRequests/AddFriend/@User.Identity.GetUserId()/@model.Id">  Add friend </a>
+
+        </div>*@
+    }
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

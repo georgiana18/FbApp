@@ -9,13 +9,13 @@ namespace FbApp.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
+        //[Required]
         public string SenderId { get; set; }
 
-        [Required]
+        //[Required]
         public ApplicationUser Sender { get; set; }
 
-        [Required]
+        //[Required]
         public string ReceiverId { get; set; }
 
         [Required]

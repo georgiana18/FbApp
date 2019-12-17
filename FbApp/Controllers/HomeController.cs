@@ -16,7 +16,7 @@ namespace FbApp.Controllers
         {
             if (this.User.IsInRole(GlobalConstants.AdminRole))
             {
-                return RedirectToAction("Index", "Home", new { area = GlobalConstants.AdminArea });
+                return RedirectToAction("Index", "Users");
             }
             if (!this.User.Identity.IsAuthenticated)
             {

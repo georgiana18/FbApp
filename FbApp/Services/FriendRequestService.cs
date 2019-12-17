@@ -14,6 +14,7 @@ namespace FbApp.Services
             this.db = db;
             this.userService = userService;
         }
+
         public void Accept(string senderId, string receiverId)
         {
             if (this.Exists(senderId, receiverId) && this.userService.UserExists(senderId) && this.userService.UserExists(receiverId))
