@@ -1,4 +1,4 @@
-﻿using FbApp.Models;
+﻿using FbApp.Dtos;
 
 namespace FbApp.Services
 {

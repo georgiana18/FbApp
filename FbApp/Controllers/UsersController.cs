@@ -1,4 +1,5 @@
-﻿using FbApp.Models;
+﻿using FbApp.Dtos;
+using FbApp.Models;
 using FbApp.Services;
 using FbApp.Utilities;
 using Microsoft.AspNet.Identity;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
 
 namespace FbApp.Controllers
 {
