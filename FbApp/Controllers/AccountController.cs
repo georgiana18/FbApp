@@ -187,7 +187,8 @@ namespace FbApp.Controllers
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     UserManager.AddToRole(user.Id, "User");
 
-                    return RedirectToAction("Index", "Users");
+                    // return RedirectToAction("Index", "Users");
+                    return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
                 }
                 AddErrors(result);
             }

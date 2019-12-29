@@ -4,6 +4,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FbApp.Models
 {
+    public enum Feeling
+    {
+        Happy = 0,
+        Luky = 1,
+        Great = 2,
+        Dissapointed = 3,
+        Miserable = 4
+    }
+
     public class Post
     {
         [Key]
@@ -11,6 +20,11 @@ namespace FbApp.Models
 
         [Required]
         public string Text { get; set; }
+
+        public Feeling Feeling { get; set; }
+
+        [Range(0, int.MaxValue)]
+        public int Likes { get; set; }
 
         public DateTime Date { get; set; }
 

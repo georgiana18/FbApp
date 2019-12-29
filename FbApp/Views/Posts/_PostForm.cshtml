@@ -1,0 +1,37 @@
+﻿@model FbApp.Dtos.PostFormModel
+<hr />
+<form method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.Label("Feeling", "How do you feel?")
+        
+        <select name="Feeling"class="form-control">
+            <option value="0">Happy</option>
+            <option value="1">Lucky</option>
+            <option value="2">Great</option>
+            <option value="3">Dissapointed</option>
+            <option value="4">Miserable</option>
+
+        </select>
+
+        @Html.ValidationMessageFor(m => m.Feeling, "", new { @class = "text-danger" })
+       
+    </div>
+    <div class="form-group">
+        @Html.Label("Text", "What do you think?") <br />
+        @Html.TextBox("Text", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Text, "", new { @class ="text-danger"})
+  
+    </div>
+    <div class="form-group">
+        @Html.Label("Photo", "Upload a photo")
+        <small>.png and .jpeg accepted</small> <br />
+        <input name="Photo" type="file" accept="image/*" class="form-control" />
+        @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary col-md-offset-0">Submit</button>
+        <button formaction='javascript:history.go(-1)' class="btn btn-default col-md-offset-0">Cancel</button>
+    </div>
+</form>

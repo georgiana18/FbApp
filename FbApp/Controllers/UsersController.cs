@@ -13,14 +13,12 @@ namespace FbApp.Controllers
 {
     public class UsersController : Controller
     {
-
         private readonly IUserService userService;
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         public UsersController()
         {
-            db = new ApplicationDbContext();
-            userService = new UserService(db);
+            userService = new UserService();
         }
 
         public UsersController(IUserService userService, ApplicationDbContext db)
@@ -29,8 +27,6 @@ namespace FbApp.Controllers
             this.db = db;
         }
 
-
-        // GET: Users
         public ActionResult Index()
         {
             var users = from user in db.Users
@@ -92,7 +88,6 @@ namespace FbApp.Controllers
 
         public ActionResult AccountDetails(string id)
         {
-            //could be optimized
             string requestUserId = User.Identity.GetUserId();
             if (requestUserId == id || User.IsInRole("Administrator"))
             {
@@ -130,6 +125,24 @@ namespace FbApp.Controllers
             }
             return selectList;
         }
+
+
+        public ActionResult Search(string searchTerm, int? page)
+        {
+            ViewData[GlobalConstants.SearchTerm] = searchTerm;
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                var users = this.userService.All();
+                return View(users);
+            }
+            else
+            {
+                var users = this.userService.UsersBySearchTerm(searchTerm);
+                return View(users);
+            }
+        }
+
     }
 
 

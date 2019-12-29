@@ -20,18 +20,20 @@
             <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
 
 
+
+
         }
 
     </div>
 
     if (User.IsInRole("Administrator"))
     {
-    <div class="panel-footer">
+        <div class="panel-footer">
 
-        <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
-        <a class="btn btn-sm btn-success" href="/Users/AccountDetails/@user.Id"> Afisare utilizator</a>
+            <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
+            <a class="btn btn-sm btn-success" href="/Users/AccountDetails/@user.Id"> Afisare utilizator</a>
 
-    </div>
+        </div>
     }
     if (User.IsInRole("User"))
     {
@@ -46,7 +48,3 @@
 
     <br /><br />
 }
-
-
-
-
