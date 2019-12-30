@@ -14,7 +14,6 @@ namespace FbApp.Services
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         private readonly IPhotoService photoService;
         private readonly ICommentService commentService;
-        private readonly IMapper mapper;
 
         public PostService()
         {
@@ -22,10 +21,8 @@ namespace FbApp.Services
 
         public PostService(ApplicationDbContext db,
                            IPhotoService photoService,
-                           ICommentService commentService,
-                           IMapper mapper)
+                           ICommentService commentService)
         {
-            this.mapper = mapper;
             this.db = db;
             this.photoService = photoService;
             this.commentService = commentService;
