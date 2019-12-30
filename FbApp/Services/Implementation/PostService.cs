@@ -9,18 +9,19 @@ using System.Linq;
 
 namespace FbApp.Services
 {
-    public class PostService: IPostService
+    public class PostService : IPostService
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         private readonly IPhotoService photoService;
         private readonly ICommentService commentService;
         private readonly IMapper mapper;
 
-        public PostService() { 
+        public PostService()
+        {
         }
 
         public PostService(ApplicationDbContext db,
-                           IPhotoService photoService, 
+                           IPhotoService photoService,
                            ICommentService commentService,
                            IMapper mapper)
         {
@@ -70,19 +71,24 @@ namespace FbApp.Services
             var config = new MapperConfiguration(cfg =>
            {
                cfg.CreateMap<Post, PostModel>();
+               cfg.CreateMap<Comment, CommentModel>();
            });
+
+            IMapper iMapper = config.CreateMapper();
 
             var friendListIds = this.FriendsIds(userId);
 
             var posts = this.db
                 .Posts
                 .Where(p => friendListIds.Contains(p.UserId) || p.UserId == userId)
-                // .Include(p => p.Comments.Select(y=> y.User))
-             //   .Include(p => p.Comments)
-                .ProjectTo<PostModel>(config)
-                .OrderByDescending(p => p.Date);
+                //.Include(p => p.Comments.Select(y=> y.User))
+                .Include(p => p.Comments)
+                .OrderByDescending(p => p.Date)
+                .ToList();
 
-            return posts ?? null;
+            IEnumerable<PostModel> postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
+
+            return postsModels ?? null;
         }
 
         public void Like(int postId)
@@ -102,20 +108,26 @@ namespace FbApp.Services
 
         public IEnumerable<PostModel> PostsByUserId(string userId)
         {
-            var configPost = new MapperConfiguration(cfg =>
+            var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Post, PostModel>();
+                cfg.CreateMap<Post, PostModel>()
+                 .ForMember(p => p.UserFullName, c => c.MapFrom(p => p.User.FirstName + " " + p.User.LastName));
+                cfg.CreateMap<Comment, CommentModel>();
             });
 
-            var posts = this.db
-                 .Posts
-                 .Where(p => p.UserId == userId)
-                 .Include(p => p.Comments)
-                 .Include(p => p.User)
-                 .ProjectTo<PostModel>(configPost)
-                 .OrderByDescending(p => p.Date);
+            IMapper iMapper = config.CreateMapper();
 
-            return posts?.AsNoTracking();
+            var posts = this.db
+                .Posts
+                .Where(p => p.UserId == userId)
+                //.Include(p => p.Comments.Select(y=> y.User))
+               // .Include(p => p.Comments)
+                .OrderByDescending(p => p.Date)
+                .ToList();
+
+            IEnumerable<PostModel> postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
+
+            return postsModels;
         }
 
         public bool UserIsAuthorizedToEdit(int postId, string userId) => this.db.Posts.Any(p => p.Id == postId && p.UserId == userId);

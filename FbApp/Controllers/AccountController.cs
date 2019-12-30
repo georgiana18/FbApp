@@ -187,8 +187,8 @@ namespace FbApp.Controllers
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     UserManager.AddToRole(user.Id, "User");
 
-                    // return RedirectToAction("Index", "Users");
-                    return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
+                    return RedirectToAction("Index", "Users");
+                    //return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
                 }
                 AddErrors(result);
             }
@@ -196,7 +196,6 @@ namespace FbApp.Controllers
             return View(model);
         }
 
-        //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)

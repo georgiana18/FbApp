@@ -60,7 +60,8 @@ namespace FbApp.Services
 
                 UserAccountModel userAccountModel = iMapper.Map<ApplicationUser, UserAccountModel>(user);
 
-             //   userAccountModel.Posts = this.postService.PostsByUserId(userId);
+                userAccountModel.Posts = this.postService.PostsByUserId(userId);
+
                 return userAccountModel;
             }
             else

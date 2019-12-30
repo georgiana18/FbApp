@@ -18,7 +18,7 @@
                         <br />
                         <div>
                             <button type="submit" class="btn btn-primary">Search</button> |
-                            <a asp-action="Search">Back to Full List</a>
+                            <a href="/Search">Back to Full List</a>
                         </div>
                     </div>
                 </form>
@@ -37,10 +37,9 @@
                         </div>
                         <div class="col-sm-6 text-left">
                             <div class="row">
-                                <a asp-controller="Users" asp-action="AccountDetails" asp-route-id="@user.Id"><strong>@user.FullName</strong></a>
+                                <a href="/Users/AccountDetails/@user.Id" ><strong>@user.FullName</strong></a>
                             </div>
-                            <div class="row">
-                                Age: @user.Age
+                            <div class="row"> Age: @user.Age
                             </div>
                         </div>
                         <div class="col-sm-4 text-left">
@@ -50,18 +49,14 @@
                         </div>
                     </div>
                 </div>
-
             }
 
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
-                    <a asp-controller="Users" asp-action="Search"
-                       asp-route-searchTerm="@ViewData[GlobalConstants.SearchTerm]"
-                   
+                    <a href="/Users/Search/@ViewData[GlobalConstants.SearchTerm]" 
                        class="btn btn-default"> Previous
                     </a>
-                    <a asp-controller="Users" asp-action="Search"
-                       asp-route-searchTerm="@ViewData[GlobalConstants.SearchTerm]"
+                    <a href="/Users/Search/@ViewData[GlobalConstants.SearchTerm]" 
                        class="btn btn-default" > Next
                     </a>
                 </div>

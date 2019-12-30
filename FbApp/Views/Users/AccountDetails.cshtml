@@ -100,6 +100,7 @@
                     {
                         <div class="row">
                             <div class="col-sm-4">
+
                                 <a href="/Posts/Edit/@post.Id" class="btn btn-warning btn-sm">Edit</a>
                                 <a href="/Posts/Delete/@post.Id" class="btn btn-danger btn-sm">Delete</a>
                             </div>
@@ -152,7 +153,7 @@
                             <a href="/FriendRequests/Accept/@Model.Id/@User.Identity.GetUserId()"
                                class="btn btn-success btn-sm">Accept Friend Request</a>
                             <a href="/FriendRequests/Decline/@Model.Id/@User.Identity.GetUserId()"
-                              class="btn btn-danger btn-sm">Decline Friend Request</a>
+                               class="btn btn-danger btn-sm">Decline Friend Request</a>
                         </div>
 
                     }
@@ -167,7 +168,7 @@
                     {
                         <div class="col-sm-12 text-center">
                             <a href="/FriendRequests/AddFriend/@User.Identity.GetUserId()/@Model.Id"
-                                class="btn btn-primary btn-sm">Add Friend</a>
+                               class="btn btn-primary btn-sm">Add Friend</a>
                         </div>
 
                     }
@@ -195,7 +196,7 @@
             </div>
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                     Messanger
+                    Messanger
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu text-center">
@@ -204,7 +205,8 @@
                         foreach (var friend in Model.Friends)
                         {
                             <li>
-                            <a href="/Messanger/Index/@friend.Id">@friend.FullName</a></li>
+                                <a href="/Messanger/Index/@friend.Id">@friend.FullName</a>
+                            </li>
                         }
                     }
                     else
