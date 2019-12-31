@@ -82,5 +82,14 @@ namespace FbApp.Models
         {
             return new ApplicationDbContext();
         }
+
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Entity<Comment>().HasRequired(s => s.Post).WithMany(g => g.Comments).HasForeignKey(s => s.PostId);
+        }
     }
 }

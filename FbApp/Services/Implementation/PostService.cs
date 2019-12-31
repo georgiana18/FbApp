@@ -78,8 +78,7 @@ namespace FbApp.Services
             var posts = this.db
                 .Posts
                 .Where(p => friendListIds.Contains(p.UserId) || p.UserId == userId)
-                //.Include(p => p.Comments.Select(y=> y.User))
-                .Include(p => p.Comments)
+                .Include(p => p.Comments.Select(y=> y.User))
                 .OrderByDescending(p => p.Date)
                 .ToList();
 
@@ -117,8 +116,7 @@ namespace FbApp.Services
             var posts = this.db
                 .Posts
                 .Where(p => p.UserId == userId)
-                //.Include(p => p.Comments.Select(y=> y.User))
-               // .Include(p => p.Comments)
+                .Include(p => p.Comments.Select(y=> y.User))
                 .OrderByDescending(p => p.Date)
                 .ToList();
 

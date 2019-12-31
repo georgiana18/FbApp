@@ -34,6 +34,6 @@ namespace FbApp.Models
 
         public virtual ApplicationUser User { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
