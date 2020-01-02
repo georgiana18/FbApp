@@ -78,10 +78,15 @@
                                 <a href="/Users/AccountDetails/@post.UserId">
                                     <strong>@post.UserFullName</strong>
                                 </a>
+
+                                <a>is feeling  @post.Feeling.ToString()</a>
+
                             </div>
                             <div class="row">
                                 <small>@post.Date.ToShortDateString()</small>
                             </div>
+
+
                         </div>
                     </div>
                     <div class="row">
@@ -130,12 +135,12 @@
                 </div>
             }
 
-            <div class="row">
+           <!-- <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
                     <a href="/Users/AccountDetails/@Model.Id" class="btn btn-default"> Previous  </a>
                     <a href="/Users/AccountDetails/@Model.Id" class="btn btn-default"> Next </a>
                 </div>
-            </div>
+            </div> -->
         }
 
         else if (ViewData[GlobalConstants.Authorization] == GlobalConstants.NoAuthorization)

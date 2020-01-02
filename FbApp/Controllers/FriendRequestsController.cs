@@ -7,15 +7,14 @@ namespace FbApp.Controllers
 {
     public class FriendRequestsController : Controller
     {
-        private readonly IFriendRequestService friendRequestService;
-        private readonly IUserService userService;
+        private readonly IFriendRequestService friendRequestService = new FriendRequestService();
+        private readonly IUserService userService = new UserService();
 
-        public FriendRequestsController(IFriendRequestService friendRequestService, IUserService userService)
+        public FriendRequestsController()
         {
-            this.friendRequestService = friendRequestService;
-            this.userService = userService;
-        }
 
+        }
+      
 
         public ActionResult AddFriend(string senderId, string receiverId)
         {

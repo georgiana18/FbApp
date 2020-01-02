@@ -9,11 +9,11 @@ namespace FbApp.Services
 {
     public class CommentService : ICommentService
     {
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
-        public CommentService(ApplicationDbContext db)
+        public CommentService()
         {
-            this.db = db;
+          
         }
 
         public IEnumerable<CommentModel> CommentsByPostId(int postId)

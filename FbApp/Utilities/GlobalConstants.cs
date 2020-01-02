@@ -9,7 +9,6 @@ namespace FbApp.Utilities
     {
         public const string AdminRole = "Administrator";
         public const string AdminArea = "Admin";
-        public const string SocialNetworkEmail = "lavishstory@gmail.com";
         public const string Authorization = "Authorization";
         public const string FullAuthorization = "Full";
         public const string FriendAuthorization = "Friend";

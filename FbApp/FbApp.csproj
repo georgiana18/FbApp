@@ -264,7 +264,6 @@
     <Compile Include="Services\Implementation\UserService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\ByteArrayExtensions.cs" />
-    <Compile Include="Utilities\CustomDataStructures\PaginatedList.cs" />
     <Compile Include="Utilities\CustomValidationAttributes\AgeAttribute.cs" />
     <Compile Include="Utilities\DataConstants.cs" />
     <Compile Include="Utilities\GlobalConstants.cs" />

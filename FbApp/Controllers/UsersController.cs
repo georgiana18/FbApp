@@ -20,13 +20,7 @@ namespace FbApp.Controllers
         {
             userService = new UserService();
         }
-
-        public UsersController(IUserService userService, ApplicationDbContext db)
-        {
-            this.userService = userService;
-            this.db = db;
-        }
-
+    
         public ActionResult Index()
         {
             var users = from user in db.Users

@@ -8,10 +8,10 @@ namespace FbApp.Services
         private readonly ApplicationDbContext db;
         private readonly IUserService userService;
 
-        public FriendRequestService(ApplicationDbContext db, IUserService userService)
+        public FriendRequestService()
         {
-            this.db = db;
-            this.userService = userService;
+            db = new ApplicationDbContext();
+            userService = new UserService();
         }
 
         public void Accept(string senderId, string receiverId)

@@ -7,11 +7,10 @@ namespace FbApp.Services
 {
     public class PhotoService : IPhotoService
     {
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
-        public PhotoService(ApplicationDbContext db)
+        public PhotoService()
         {
-            this.db = db;
         }
 
         public int Create(IFormFile photo, string userId)

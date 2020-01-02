@@ -12,20 +12,11 @@ namespace FbApp.Services
     public class PostService : IPostService
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        private readonly IPhotoService photoService;
-        private readonly ICommentService commentService;
+        private readonly IPhotoService photoService = new PhotoService();
+        private readonly ICommentService commentService = new CommentService();
 
         public PostService()
         {
-        }
-
-        public PostService(ApplicationDbContext db,
-                           IPhotoService photoService,
-                           ICommentService commentService)
-        {
-            this.db = db;
-            this.photoService = photoService;
-            this.commentService = commentService;
         }
 
         public void Create(string userId, Feeling feeling, string text, byte[] photo)
@@ -78,7 +69,7 @@ namespace FbApp.Services
             var posts = this.db
                 .Posts
                 .Where(p => friendListIds.Contains(p.UserId) || p.UserId == userId)
-                .Include(p => p.Comments.Select(y=> y.User))
+                .Include(p => p.Comments.Select(y => y.User))
                 .OrderByDescending(p => p.Date)
                 .ToList();
 
@@ -99,7 +90,20 @@ namespace FbApp.Services
 
         public PostModel PostById(int postId)
         {
-            return this.db.Posts.Where(p => p.Id == postId).ProjectTo<PostModel>().FirstOrDefault();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Post, PostModel>()
+                 .ForMember(p => p.UserFullName, c => c.MapFrom(p => p.User.FirstName + " " + p.User.LastName))
+                 .ForMember(p => p.Comments, c => c.MapFrom(p => p.Comments));
+                //cfg.CreateMap<Comment, CommentModel>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            Post post = this.db.Posts.Where(p => p.Id == postId).FirstOrDefault();
+            PostModel model = iMapper.Map<Post, PostModel>(post);
+
+            return model;
         }
 
         public IEnumerable<PostModel> PostsByUserId(string userId)
@@ -113,10 +117,9 @@ namespace FbApp.Services
 
             IMapper iMapper = config.CreateMapper();
 
-            var posts = this.db
-                .Posts
+            var posts = this.db.Posts
                 .Where(p => p.UserId == userId)
-                .Include(p => p.Comments.Select(y=> y.User))
+                .Include(p => p.Comments.Select(y => y.User))
                 .OrderByDescending(p => p.Date)
                 .ToList();
 

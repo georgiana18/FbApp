@@ -69,76 +69,76 @@ namespace FbApp.Controllers
                 Text = postInfo.Text,
                 Feeling = postInfo.Feeling
             };
-        
+
             return View(postFormModel);
-    }
-
-    [HttpPost]
-    public ActionResult Edit(int postId, [Bind(Exclude = "Photo")]  PostFormModel model)
-    {
-        if (!this.postService.UserIsAuthorizedToEdit(postId, this.User.Identity.GetUserId()))
-        {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad request");
         }
-        byte[] imageData = null;
-        if (Request.Files.Count > 0)
+
+        [HttpPost]
+        public ActionResult Edit(int id, [Bind(Exclude = "Photo")]  PostFormModel model)
         {
-            HttpPostedFileBase poImgFile = Request.Files["Photo"];
-            using (var binary = new BinaryReader(poImgFile.InputStream))
+            if (!this.postService.UserIsAuthorizedToEdit(id, this.User.Identity.GetUserId()))
             {
-                imageData = binary.ReadBytes(poImgFile.ContentLength);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad request");
             }
+            byte[] imageData = null;
+            if (Request.Files.Count > 0)
+            {
+                HttpPostedFileBase poImgFile = Request.Files["Photo"];
+                using (var binary = new BinaryReader(poImgFile.InputStream))
+                {
+                    imageData = binary.ReadBytes(poImgFile.ContentLength);
+                }
+            }
+
+            this.postService.Edit(id, model.Feeling, model.Text, imageData);
+
+            return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
         }
 
-        this.postService.Edit(postId, model.Feeling, model.Text, imageData);
-
-        return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
-    }
-
-    public ActionResult Delete(int id)
-    {
-        if (!this.postService.Exists(id))
+        public ActionResult Delete(int id)
         {
-            throw new HttpException(404, "Not found");
+            if (!this.postService.Exists(id))
+            {
+                throw new HttpException(404, "Not found");
+            }
+
+            var postInfo = this.postService.PostById(id);
+
+            ViewData["PostPhoto"] = postInfo.Photo;
+
+            var postFormModel = new PostFormModel
+            {
+                Text = postInfo.Text,
+                Feeling = postInfo.Feeling
+            };
+
+            return View(postFormModel);
         }
 
-        var postInfo = this.postService.PostById(id);
-
-        ViewData["PostPhoto"] = postInfo.Photo;
-
-        var postFormModel = new PostFormModel
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult Destroy(int id)
         {
-            Text = postInfo.Text,
-            Feeling = postInfo.Feeling
-        };
+            if (!this.postService.UserIsAuthorizedToEdit(id, this.User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad request");
+            }
 
-        return View(postFormModel);
-    }
+            this.postService.Delete(id);
 
-    [HttpPost]
-    [ActionName("Delete")]
-    public ActionResult Destroy(int postId)
-    {
-        if (!this.postService.UserIsAuthorizedToEdit(postId, this.User.Identity.GetUserId()))
-        {
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad request");
+            return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
         }
 
-        this.postService.Delete(postId);
-
-        return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
-    }
-
-    public ActionResult Like(int postId, int pageIndex)
-    {
-        if (!this.postService.Exists(postId))
+        public ActionResult Like(int id) //id = postId
         {
-            throw new HttpException(404, "Not found");
+            if (!this.postService.Exists(id))
+            {
+                throw new HttpException(404, "Not found");
+            }
+
+            this.postService.Like(id);
+
+            return RedirectToAction("Index", "Users");
         }
-
-        this.postService.Like(postId);
-
-        return RedirectToAction("Index", "Users");
     }
-}
 }

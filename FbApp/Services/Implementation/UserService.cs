@@ -12,17 +12,10 @@ namespace FbApp.Services
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         private readonly IPostService postService = new PostService();
-        private readonly IMapper mapper;
 
         public UserService()
         {
-        }
 
-        public UserService(ApplicationDbContext db, IPostService postService, IMapper mapper)
-        {
-            this.mapper = mapper;
-            this.db = db;
-            this.postService = postService;
         }
 
         public bool UserExists(string userId) => this.db.Users.Any(u => u.Id == userId && u.IsDeleted == false);
@@ -51,8 +44,20 @@ namespace FbApp.Services
         {
             if (this.UserExists(userId))
             {
-                var config = new MapperConfiguration(cfg => {
-                    cfg.CreateMap<ApplicationUser, UserAccountModel>();
+                var config = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<ApplicationUser, UserAccountModel>()
+                       .ForMember(p => p.FriendRequestSent, c => c.MapFrom(p => p.FriendRequestSent))
+                       .ForMember(p => p.FriendRequestReceived, c => c.MapFrom(p => p.FriendRequestReceived));
+
+                    cfg.CreateMap<FriendRequest, ReceivedFriendRequestModel>()
+                      .ForMember(f => f.SenderFullName, c => c.MapFrom(f => f.Sender.FirstName + " " + f.Sender.LastName));
+
+                    cfg.CreateMap<FriendRequest, SentFriendRequestModel>();
+                    //  .ForMember(f => f.SenderFullName, c => c.MapFrom(f => f.Sender.FirstName + " " + f.Sender.LastName));
+
+                    cfg.CreateMap<ApplicationUser, UserListModel>()
+                       .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName));
                 });
                 IMapper iMapper = config.CreateMapper();
 
@@ -60,8 +65,41 @@ namespace FbApp.Services
 
                 UserAccountModel userAccountModel = iMapper.Map<ApplicationUser, UserAccountModel>(user);
 
-                userAccountModel.Posts = this.postService.PostsByUserId(userId);
+                var friends = this.db
+                    .UserFriends
+                    .Where(u => u.UserId == userId && !u.Friend.IsDeleted)
+                    .Select(u => u.Friend)
+                    .ToList();
 
+                var friendRequestsReceived = this.db.FriendRequests
+                    .Where(u => u.ReceiverId == userId)
+                    .ToList();
+
+                var receivedFR = iMapper.Map<List<FriendRequest>, List<ReceivedFriendRequestModel>>(friendRequestsReceived);
+
+                var friendRequestsSent = this.db.FriendRequests
+                   .Where(u => u.SenderId == userId)
+                   .ToList();
+
+               var sentFR = iMapper.Map<List<FriendRequest>, List<SentFriendRequestModel>>(friendRequestsSent);
+
+                var otherFriends = this.db.UserFriends
+                    .Where(u => u.FriendId == userId && !u.User.IsDeleted)
+                    .Select(u => u.User)
+                    .ToList();
+
+                var friendModels = iMapper.Map<List<ApplicationUser>, List<UserListModel>>(friends);
+                var otherFriendModels = iMapper.Map<List<ApplicationUser>, List<UserListModel>>(otherFriends);
+
+                //add other friends to friend model in the future
+                friendModels.AddRange(otherFriendModels);
+
+                userAccountModel.FriendRequestSent = sentFR;
+                userAccountModel.FriendRequestReceived = receivedFR;
+
+                userAccountModel.Friends = friendModels;
+                userAccountModel.Posts = this.postService.PostsByUserId(userId);
+                
                 return userAccountModel;
             }
             else
@@ -96,15 +134,26 @@ namespace FbApp.Services
 
         public IEnumerable<UserListModel> UsersBySearchTerm(string searchTerm)
         {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ApplicationUser, UserListModel>()
+                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName))
+                  .ForMember(u => u.NumberOfPosts, c => c.MapFrom(u => u.Posts.Count));
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
             var users = this.db.Users
                 .Where(u => (u.FirstName.ToLower().Contains(searchTerm.ToLower())
                 || u.LastName.ToLower().Contains(searchTerm.ToLower())
                 || u.UserName.ToLower().Contains(searchTerm.ToLower()))
                 && u.UserName != "Administrator"
                 && u.IsDeleted == false)
-                .ProjectTo<UserListModel>();
+                .ToList();
 
-            return users != null ? users.AsNoTracking() : null;
+            IEnumerable<UserListModel> userModels = iMapper.Map<List<ApplicationUser>, IEnumerable<UserListModel>>(users);
+
+            return userModels;
         }
 
         public object GetUserFullName(string id)
@@ -129,11 +178,21 @@ namespace FbApp.Services
 
         public IEnumerable<UserListModel> All()
         {
-            var users = this.db.Users
-                .Where(u => u.UserName != "Administrator" && u.IsDeleted == false)
-                .ProjectTo<UserListModel>();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ApplicationUser, UserListModel>()
+                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName))
+                  .ForMember(u => u.NumberOfPosts, c => c.MapFrom(u => u.Posts.Count));
+            });
 
-            return users != null ? users.AsNoTracking() : null;
+            IMapper iMapper = config.CreateMapper();
+
+            var users = this.db.Users
+                .Where(u => u.UserName != "Administrator" && u.IsDeleted == false).ToList();
+
+            IEnumerable<UserListModel> userModels = iMapper.Map<List<ApplicationUser>, IEnumerable<UserListModel>>(users);
+
+            return userModels;
         }
 
         public void EditUser(string id, string firstName, string lastName, int age, string email, string username)
