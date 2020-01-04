@@ -20,14 +20,12 @@ namespace FbApp.Controllers
         {
             userService = new UserService();
         }
-    
+
         public ActionResult Index()
         {
-            var users = from user in db.Users
-                        orderby user.UserName
-                        select user;
-            ViewBag.UsersList = users;
-            return View();
+            UserAccountModel user = this.userService.UserDetailsFriendsCommentsAndPosts(this.User.Identity.GetUserId());
+
+            return View(user);
         }
 
         [Authorize(Roles = "Administrator")]

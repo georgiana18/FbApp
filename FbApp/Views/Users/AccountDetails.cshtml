@@ -94,13 +94,14 @@
                             <p>@post.Text</p>
                         </div>
                     </div>
+
                     @if (!string.IsNullOrEmpty(post.Photo.ToRenderablePictureString()))
                     {
                         <div class="row">
                             <img src="@post.Photo.ToRenderablePictureString()" class="img-responsive" style="width: 100%" alt="Avatar">
                         </div>
-
                     }
+
                     @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization)
                     {
                         <div class="row">
@@ -127,6 +128,7 @@
                             <small>@post.Likes Likes / @post.Comments.Count() Comments</small>
                         </div>
                     </div>
+
                     @if (post.Comments.Any())
                     {
                         <hr />
@@ -135,12 +137,6 @@
                 </div>
             }
 
-           <!-- <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-                    <a href="/Users/AccountDetails/@Model.Id" class="btn btn-default"> Previous  </a>
-                    <a href="/Users/AccountDetails/@Model.Id" class="btn btn-default"> Next </a>
-                </div>
-            </div> -->
         }
 
         else if (ViewData[GlobalConstants.Authorization] == GlobalConstants.NoAuthorization)

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using FbApp.Dtos;
 using FbApp.Models;
 using System;
@@ -58,7 +57,9 @@ namespace FbApp.Services
         {
             var config = new MapperConfiguration(cfg =>
            {
-               cfg.CreateMap<Post, PostModel>();
+               cfg.CreateMap<Post, PostModel>()
+                 .ForMember(p => p.UserFullName, c => c.MapFrom(p => p.User.FirstName + " " + p.User.LastName))
+                 .ForMember(p => p.Comments, c => c.MapFrom(p => p.Comments));
                cfg.CreateMap<Comment, CommentModel>();
            });
 
@@ -73,9 +74,9 @@ namespace FbApp.Services
                 .OrderByDescending(p => p.Date)
                 .ToList();
 
-            IEnumerable<PostModel> postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
+            var postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
 
-            return postsModels ?? null;
+            return postsModels;
         }
 
         public void Like(int postId)
@@ -95,7 +96,6 @@ namespace FbApp.Services
                 cfg.CreateMap<Post, PostModel>()
                  .ForMember(p => p.UserFullName, c => c.MapFrom(p => p.User.FirstName + " " + p.User.LastName))
                  .ForMember(p => p.Comments, c => c.MapFrom(p => p.Comments));
-                //cfg.CreateMap<Comment, CommentModel>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -123,7 +123,7 @@ namespace FbApp.Services
                 .OrderByDescending(p => p.Date)
                 .ToList();
 
-            IEnumerable<PostModel> postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
+            var postsModels = iMapper.Map<List<Post>, IEnumerable<PostModel>>(posts);
 
             return postsModels;
         }

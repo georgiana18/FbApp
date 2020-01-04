@@ -54,7 +54,6 @@ namespace FbApp.Services
                       .ForMember(f => f.SenderFullName, c => c.MapFrom(f => f.Sender.FirstName + " " + f.Sender.LastName));
 
                     cfg.CreateMap<FriendRequest, SentFriendRequestModel>();
-                    //  .ForMember(f => f.SenderFullName, c => c.MapFrom(f => f.Sender.FirstName + " " + f.Sender.LastName));
 
                     cfg.CreateMap<ApplicationUser, UserListModel>()
                        .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName));
@@ -81,7 +80,7 @@ namespace FbApp.Services
                    .Where(u => u.SenderId == userId)
                    .ToList();
 
-               var sentFR = iMapper.Map<List<FriendRequest>, List<SentFriendRequestModel>>(friendRequestsSent);
+                var sentFR = iMapper.Map<List<FriendRequest>, List<SentFriendRequestModel>>(friendRequestsSent);
 
                 var otherFriends = this.db.UserFriends
                     .Where(u => u.FriendId == userId && !u.User.IsDeleted)
@@ -99,7 +98,7 @@ namespace FbApp.Services
 
                 userAccountModel.Friends = friendModels;
                 userAccountModel.Posts = this.postService.PostsByUserId(userId);
-                
+
                 return userAccountModel;
             }
             else
@@ -115,16 +114,19 @@ namespace FbApp.Services
                 var configUser = new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<ApplicationUser, UserAccountModel>();
+
+
                 });
 
-                var userAccountModel = db
-                   .Users
-                   .Where(u => u.Id == userId)
-                   .ProjectTo<UserAccountModel>(configUser)
-                   .FirstOrDefault();
+                IMapper iMapper = configUser.CreateMapper();
 
-                userAccountModel.Posts = this.postService.FriendPostsByUserId(userId);
-                return userAccountModel;
+                var user = db.Users.Where(u => u.Id == userId).FirstOrDefault();
+
+                var model = iMapper.Map<ApplicationUser, UserAccountModel>(user);
+
+                model.Posts = this.postService.FriendPostsByUserId(userId);
+
+                return model;
             }
             else
             {
@@ -137,8 +139,7 @@ namespace FbApp.Services
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ApplicationUser, UserListModel>()
-                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName))
-                  .ForMember(u => u.NumberOfPosts, c => c.MapFrom(u => u.Posts.Count));
+                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName));
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -181,8 +182,7 @@ namespace FbApp.Services
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<ApplicationUser, UserListModel>()
-                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName))
-                  .ForMember(u => u.NumberOfPosts, c => c.MapFrom(u => u.Posts.Count));
+                  .ForMember(u => u.FullName, c => c.MapFrom(u => u.FirstName + " " + u.LastName));
             });
 
             IMapper iMapper = config.CreateMapper();

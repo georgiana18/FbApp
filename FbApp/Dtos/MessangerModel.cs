@@ -6,7 +6,7 @@ namespace FbApp.Dtos
 {
     public class MessangerModel
     {
-        public IEnumerable<MessageModel> Messages { get; set; }
+        public IEnumerable<MessageModel> Messages { get; set; } = new List<MessageModel>();
 
         [Required]
         [MaxLength(DataConstants.MaxMessageLength)]

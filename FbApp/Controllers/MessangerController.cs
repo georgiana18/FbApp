@@ -12,10 +12,10 @@ namespace FbApp.Controllers
         private readonly IUserService userService;
         private readonly IMessangerService messangerService;
 
-        public MessangerController(IUserService userService, IMessangerService messangerService)
+        public MessangerController()
         {
-            this.userService = userService;
-            this.messangerService = messangerService;
+            this.userService = new UserService();
+            this.messangerService = new MessangerService();
         }
 
         public ActionResult Index(string id)
@@ -34,7 +34,7 @@ namespace FbApp.Controllers
 
             messangerModel.Messages = this.messangerService.AllByUserIds(User.Identity.GetUserId(), id);
 
-            return View();
+            return View(messangerModel);
         }
 
         [HttpPost]

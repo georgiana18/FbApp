@@ -3,20 +3,24 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
-<ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right">
 
-    <li><a href="/Users/Search">Search Users</a></li>
-    <li>
-        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-    </li>
-    <li>
-        <img src="@Url.Action("UserPhotos", "Home" )" height="45" width="45" style="border-radius: 100px; border-color: white; border: 1px; margin-top:3px;" />
+            <li><a href="/Users/Search">Search Users</a></li>
+            <li>
+                <a href="/Users/AccountDetails/@User.Identity.GetUserId()">
+                    @User.Identity.Name
+                </a>
+            </li>
 
-    </li>
-    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-</ul>
+            <li>
+                <a href="/Manage/Index">
+                    <img src="@Url.Action("UserPhotos", "Home" )" height="30" width="30" style="border-radius: 100px;" />
+                </a>
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
     }
 }
 else

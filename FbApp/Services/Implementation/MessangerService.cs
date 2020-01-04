@@ -1,39 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using AutoMapper.QueryableExtensions;
+using AutoMapper;
 using FbApp.Dtos;
 using FbApp.Models;
 
-namespace FbApp.Services.Implementation
+namespace FbApp.Services
 {
     public class MessangerService : IMessangerService
     {
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
-        public MessangerService(ApplicationDbContext db)
+        public MessangerService()
         {
-            this.db = db;
         }
 
         public List<MessageModel> All()
         {
-            return this.db
-                .Messages
-                .ProjectTo<MessageModel>()
-                .ToList();
+            var config = new MapperConfiguration(cfg =>
+           {
+               cfg.CreateMap<Message, MessageModel>()
+                    .ForMember(m => m.SenderFullName, c => c.MapFrom(m => m.Sender.FirstName + " " + m.Sender.LastName));
+           });
+            IMapper iMapper = config.CreateMapper();
+
+            var messages = this.db.Messages.ToList();
+
+            var messageModels = iMapper.Map<List<Message>, List<MessageModel>>(messages);
+
+            return messageModels;
+
         }
 
         public IEnumerable<MessageModel> AllByUserIds(string userId, string otherUserId)
         {
-            var messages = this.db
-               .Messages
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Message, MessageModel>()
+                     .ForMember(m => m.SenderFullName, c => c.MapFrom(m => m.Sender.FirstName + " " + m.Sender.LastName));
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            var messages = this.db.Messages
                .Where(m => (m.SenderId == userId && m.ReceiverId == otherUserId) || (m.SenderId == otherUserId && m.ReceiverId == userId))
                .OrderBy(m => m.DateSent)
-               .ProjectTo<MessageModel>();
+               .ToList();
 
-            return messages?.AsNoTracking();
+            var messageModels = iMapper.Map<List<Message>, IEnumerable<MessageModel>>(messages);
+            return messageModels;
         }
 
         public void Create(string senderId, string receiverId, string text)

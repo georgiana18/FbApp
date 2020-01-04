@@ -31,6 +31,7 @@ namespace FbApp.Services
                 return instanceOfPhoto.Id;
             }
         }
+
         public byte[] PhotoAsBytes(IFormFile photo)
         {
             byte[] photoAsBytes;
@@ -39,7 +40,7 @@ namespace FbApp.Services
                 photo.CopyTo(memoryStream);
                 photoAsBytes = memoryStream.ToArray();
             }
-            return photoAsBytes; 
+            return photoAsBytes;
         }
 
         public bool PhotoExists(int photoId) => this.db.Photos.Any(p => p.Id == photoId);

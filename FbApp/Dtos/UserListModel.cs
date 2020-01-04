@@ -11,15 +11,12 @@ namespace FbApp.Dtos
 
         public int Age { get; set; }
 
-        public int NumberOfPosts { get; set; }
-
         public byte[] ProfilePicture { get; set; }
 
         public void ConfigureMapping(Profile profile)
         {
             profile.CreateMap<ApplicationUser, UserListModel>()
-                .ForMember(u => u.FullName, cfg => cfg.MapFrom(u => u.FirstName + " " + u.LastName))
-                .ForMember(u => u.NumberOfPosts, cfg => cfg.MapFrom(u => u.Posts.Count));
+                .ForMember(u => u.FullName, cfg => cfg.MapFrom(u => u.FirstName + " " + u.LastName));
         }
     }
 }

@@ -1,44 +1,89 @@
-﻿@{
-    ViewBag.Title = "Afisare utilizatori";
-}
+﻿@model FbApp.Dtos.UserAccountModel
+@using FbApp.Utilities
 
-<ol class="breadcrumb">
-    <li><h3>@ViewBag.Title</h3></li>
-</ol>
-
-@foreach (var user in ViewBag.UsersList)
-{
-    <div class="panel-heading">Nume utilizator: @user.UserName</div>
-
-    <div class="panel-body">
-
-        <i class="glyphicon glyphicon-envelope"></i> Email utilizator: <span class="label label-default">@user.Email</span>
-
-        <br /><br />
-        @if (@user.PhoneNumber != null)
-        {
-            <i class="glyphicon glyphicon-phone"></i>@:Telefon utilizator:<span class="label label-default">@user.PhoneNumber</span>
-        }
-
+<div class="row">
+    <div class="col-sm-3 well text-center">
+        <div class="well">
+            <p>
+                <a href="/Users/AccountDetails/@Model.Id"><strong>@Model.FirstName @Model.LastName</strong></a>
+            </p>
+            <img src="@Model.ProfilePicture.ToRenderablePictureString()" class="img-circle" height="100" width="100" alt="ProfilePicture">
+        </div>
     </div>
-
-    if (User.IsInRole("Administrator"))
-    {
-        <div class="panel-footer">
-
-            <a class="btn btn-sm btn-success" href="/Users/Edit/@user.Id"> Editare utilizator</a>
-            <a class="btn btn-sm btn-success" href="/Users/AccountDetails/@user.Id"> Afisare utilizator</a>
-
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default text-left">
+                    <div class="panel-body">
+                        <p contenteditable="true">What do you think @(User.Identity.Name)?</p>
+                        <a class="btn btn-primary btn-sm" href="/Posts/Create">Create Post</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    }
-    if (User.IsInRole("User"))
-    {
-        <div class="panel-footer">
+        @if (Model.Posts.Any())
+        {
+            foreach (var post in Model.Posts)
+            {
 
-            <a class="btn btn-sm btn-success" href="/Users/AccountDetails/@user.Id"> Afisare utilizator</a>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img src="@post.UserProfilePicture.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
+                        </div>
+                        <div class="col-sm-10 text-left">
+                            <div class="row">
+                                <a href="/Users/AccountDetails/@post.Id">
+                                    <strong>@post.UserFullName</strong>
+                                </a> is feeling @post.Feeling.ToString()
+                            </div>
+                            <div class="row"><small>@post.Date.ToShortDateString()</small></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>@post.Text</p>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(post.Photo.ToRenderablePictureString()))
+                    {
 
-        </div>
-    }
+                        <div class="row">
+                            <img src="@post.Photo.ToRenderablePictureString()" class="img-responsive" style="width: 100%" alt="Avatar">
+                        </div>
 
-    <br /><br />
-}
+                    }
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <a href="/Posts/Like/@post.Id" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                            </a>
+                            <a href="/Comment/Create/@post.Id" class="btn btn-default btn-sm">Comment</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <small>@post.Likes Likes / @post.Comments.Count() Comments</small>
+                        </div>
+                    </div>
+                    @if (post.Comments.Any())
+                    {
+                        <hr />
+                        @Html.Partial("_PostComments", post.Comments)
+                    }
+                </div>
+
+            }
+        }
+        else
+        {
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h3>Create a post or find friends!</h3>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
