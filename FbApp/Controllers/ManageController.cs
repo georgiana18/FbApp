@@ -56,7 +56,7 @@ namespace FbApp.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
-            ViewBag.StatusMessage =
+             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
@@ -81,6 +81,15 @@ namespace FbApp.Controllers
                 Age = user.Age,
                 Email = user.Email
             };
+
+            if (user.Privacy == "Public")
+            {
+                ViewBag.Privacy = 0;
+            }
+            else
+            {
+                ViewBag.Privacy = 1;
+            }
             return View(model);
         }
 
@@ -120,6 +129,7 @@ namespace FbApp.Controllers
         public ActionResult UpdateProfileInfo(ApplicationUser edited_user)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
+
             try
             {
                 if (ModelState.IsValid)
@@ -134,8 +144,17 @@ namespace FbApp.Controllers
                         db.SaveChanges();
                         UserManager.Update(user);
                         TempData["message"] = "Userul a fost modificat!";
+
+                        if (user.Privacy == "Public")
+                        {
+                            ViewBag.Privacy = 0;
+                        }
+                        else
+                        {
+                            ViewBag.Privacy = 1;
+                        }
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("AccountDetails", "Users", new { id = user.Id });
                 }
                 else
                 {

@@ -178,6 +178,17 @@
                     </div>
                 }
             }
+            else
+            {
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <h4>@Model.FirstName doesnt have any posts!</h4>
+                        </div>
+                    </div>
+                </div>
+
+            }
         }
         else if (ViewData[GlobalConstants.Authorization] == GlobalConstants.NoAuthorization)
         {
@@ -225,8 +236,8 @@
                     </div>
                 </div>
             </div>
-
         }
+
     </div>
     <div class="col-sm-3 well">
         @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization)

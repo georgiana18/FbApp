@@ -93,6 +93,10 @@ namespace FbApp.Controllers
             {
                 ViewData[GlobalConstants.Authorization] = GlobalConstants.FriendAuthorization;
             }
+            else if(this.userService.UserDetails(id).Privacy == "Private" && this.userService.CheckIfFriends(requestUserId, id))
+            {
+                ViewData[GlobalConstants.Authorization] = GlobalConstants.FriendAuthorization;
+            }
             else
             {
                 ViewData[GlobalConstants.Authorization] = GlobalConstants.NoAuthorization;

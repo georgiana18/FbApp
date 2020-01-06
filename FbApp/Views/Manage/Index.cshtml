@@ -62,15 +62,25 @@
 
         @Html.LabelFor(m => m.Privacy, new { @class = "col-md-2 control-label" })
 
-        <select name="Privacy" class="form-control">
-            <option value="Private">Private</option>
-            <option value="Public">Public</option>
-        </select>
+        if (@ViewBag.Privacy == 0)
+        {
+            <select name="Privacy" class="form-control">
+                <option value="Private">Private</option>
+                <option value="Public" selected>Public</option>
+            </select>
+        }
+        else
+        {
+            <select name="Privacy" class="form-control">
+                <option value="Private" selected>Private</option>
+                <option value="Public">Public</option>
+            </select>
+        }
 
         <br />
-        <div class="btn btn-sm btn-success">
-            @Html.ActionLink("Modifica Informatii Profil", "AccountDetails", "Users", new { id = @User.Identity.GetUserId() }, null)
-        </div>
+        <button class="btn btn-sm btn-success">
+           Modifica Informatii Profil 
+        </button>
     }
     <br />
     <dl class="dl-horizontal">
