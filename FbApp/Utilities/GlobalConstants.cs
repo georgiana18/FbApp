@@ -16,5 +16,6 @@ namespace FbApp.Utilities
         public const string SearchTerm = "searchTerm";
         public const string CompsiteChatId = "compsiteChatId";
         public const string CounterPartFullName = "countePartFullName";
+        public const string PublicAuthorization = "Public";
     }
 }

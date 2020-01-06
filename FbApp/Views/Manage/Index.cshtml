@@ -1,4 +1,6 @@
 ﻿@model FbApp.Models.IndexViewModel
+@using Microsoft.AspNet.Identity
+
 @{
     ViewBag.Title = "Manage";
 }
@@ -59,14 +61,16 @@
         <br />
 
         @Html.LabelFor(m => m.Privacy, new { @class = "col-md-2 control-label" })
-        
+
         <select name="Privacy" class="form-control">
             <option value="Private">Private</option>
-            <option value="Public" >Public</option>
+            <option value="Public">Public</option>
         </select>
-      
+
         <br />
-        <button class="btn btn-sm btn-success" type="submit">Modifica informatii profil</button>
+        <div class="btn btn-sm btn-success">
+            @Html.ActionLink("Modifica Informatii Profil", "AccountDetails", "Users", new { id = @User.Identity.GetUserId() }, null)
+        </div>
     }
     <br />
     <dl class="dl-horizontal">
@@ -82,11 +86,6 @@
                 @Html.ActionLink("Create", "SetPassword")
             }
             ]
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
         </dd>
     </dl>
 

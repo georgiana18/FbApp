@@ -62,83 +62,123 @@
                 </div>
             </div>
         }
-        @if (Model.Posts.Any() && (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization || ViewData[GlobalConstants.Authorization] == GlobalConstants.FriendAuthorization))
+
+        @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization ||
+            ViewData[GlobalConstants.Authorization] == GlobalConstants.FriendAuthorization
+            || ViewData[GlobalConstants.Authorization] == GlobalConstants.PublicAuthorization)
         {
-
-            foreach (var post in Model.Posts)
+            if (ViewData[GlobalConstants.Authorization] == GlobalConstants.PublicAuthorization)
             {
-
                 <div class="well">
                     <div class="row">
-                        <div class="col-sm-2">
-                            <img src="@post.UserProfilePicture.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
-                        </div>
-                        <div class="col-sm-10 text-left">
-                            <div class="row">
-                                <a href="/Users/AccountDetails/@post.UserId">
-                                    <strong>@post.UserFullName</strong>
-                                </a>
-
-                                <a>is feeling  @post.Feeling.ToString()</a>
-
-                            </div>
-                            <div class="row">
-                                <small>@post.Date.ToShortDateString()</small>
-                            </div>
-
-
+                        <div class="col-sm-12 text-center">
+                            <h4>Add @Model.FirstName to your friend list</h4>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
-                            <p>@post.Text</p>
-                        </div>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(post.Photo.ToRenderablePictureString()))
-                    {
-                        <div class="row">
-                            <img src="@post.Photo.ToRenderablePictureString()" class="img-responsive" style="width: 100%" alt="Avatar">
-                        </div>
-                    }
-
-                    @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization)
-                    {
-                        <div class="row">
-                            <div class="col-sm-4">
-
-                                <a href="/Posts/Edit/@post.Id" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="/Posts/Delete/@post.Id" class="btn btn-danger btn-sm">Delete</a>
+                        @if (Model.FriendRequestSent.Any(fr => fr.ReceiverId == User.Identity.GetUserId()))
+                        {
+                            <div class="col-sm-12 text-center">
+                                <a href="/FriendRequests/Accept/@Model.Id/@User.Identity.GetUserId()"
+                                   class="btn btn-success btn-sm">Accept Friend Request</a>
+                                <a href="/FriendRequests/Decline/@Model.Id/@User.Identity.GetUserId()"
+                                   class="btn btn-danger btn-sm">Decline Friend Request</a>
                             </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <a href="/Posts/Like/@post.Id" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                                </a>
-                                <a href="/Comment/Create/@post.Id" class="btn btn-default btn-sm">Comment</a>
-                            </div>
-                        </div>
-                    }
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <small>@post.Likes Likes / @post.Comments.Count() Comments</small>
-                        </div>
-                    </div>
 
-                    @if (post.Comments.Any())
-                    {
-                        <hr />
-                        @Html.Partial("_PostComments", post.Comments)
-                    }
+                        }
+                        else if (Model.FriendRequestReceived.Any(fr => fr.SenderId == User.Identity.GetUserId()))
+                        {
+                            <div class="col-sm-12 text-center">
+                                <h4 style="color:darkolivegreen"> Your friend request is @Model.FriendRequestReceived.FirstOrDefault(fr => fr.SenderId == User.Identity.GetUserId()).FriendRequestStatus.ToString()</h4>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="col-sm-12 text-center">
+                                <a href="/FriendRequests/AddFriend/@User.Identity.GetUserId()/@Model.Id"
+                                   class="btn btn-primary btn-sm">Add Friend</a>
+                            </div>
+
+                        }
+                    </div>
                 </div>
             }
+            if (Model.Posts.Any())
+            {
+                foreach (var post in Model.Posts)
+                {
 
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <img src="@post.UserProfilePicture.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
+                            </div>
+                            <div class="col-sm-10 text-left">
+                                <div class="row">
+                                    <a href="/Users/AccountDetails/@post.UserId">
+                                        <strong>@post.UserFullName</strong>
+                                    </a>
+
+                                    <a>is feeling  @post.Feeling.ToString()</a>
+
+                                </div>
+                                <div class="row">
+                                    <small>@post.Date.ToShortDateString()</small>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p>@post.Text</p>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(post.Photo.ToRenderablePictureString()))
+                        {
+                            <div class="row">
+                                <img src="@post.Photo.ToRenderablePictureString()" class="img-responsive" style="width: 100%" alt="Avatar">
+                            </div>
+                        }
+
+                        @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization)
+                        {
+                            <div class="row">
+                                <div class="col-sm-4">
+
+                                    <a href="/Posts/Edit/@post.Id" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/Posts/Delete/@post.Id" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <a href="/Posts/Like/@post.Id" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                                    </a>
+                                    <a href="/Comment/Create/@post.Id" class="btn btn-default btn-sm">Comment</a>
+                                </div>
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <small>@post.Likes Likes / @post.Comments.Count() Comments</small>
+                            </div>
+                        </div>
+
+                        @if (post.Comments.Any())
+                        {
+                            <hr />
+                            @Html.Partial("_PostComments", post.Comments)
+                        }
+                    </div>
+                }
+            }
         }
-
         else if (ViewData[GlobalConstants.Authorization] == GlobalConstants.NoAuthorization)
         {
             <div class="well">
@@ -212,7 +252,7 @@
                     }
                     else
                     {
-                        <li><a href="#">You need to have frinds!</a></li>
+                        <li><a href="#">You need to have friends!</a></li>
                     }
                 </ul>
             </div>
