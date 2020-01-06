@@ -30,7 +30,7 @@
             @Html.LabelFor(m => m.ProfilePhoto, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
                 <input type="file" name="ProfilePhoto" id="fileUpload" accept=".png,.jpg,.jpeg,.gif,.tif" />
-                <br/>
+                <br />
                 <input type="submit" value="Save" formmethod="post" class="btn btn-sm btn-success" />
             </div>
         </div>
@@ -56,6 +56,15 @@
         @Html.LabelFor(m => m.Age, new { @class = "col-md-2 control-label" })
         @Html.TextBoxFor(m => m.Age, new { @type = "number", @min = "0", @max = "130", @step = "1", @class = "form-control", @name = "Age" })
         @Html.HiddenFor(m => m.Age)
+        <br />
+
+        @Html.LabelFor(m => m.Privacy, new { @class = "col-md-2 control-label" })
+        
+        <select name="Privacy" class="form-control">
+            <option value="Private">Private</option>
+            <option value="Public" >Public</option>
+        </select>
+      
         <br />
         <button class="btn btn-sm btn-success" type="submit">Modifica informatii profil</button>
     }

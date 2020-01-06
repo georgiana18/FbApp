@@ -27,6 +27,9 @@ namespace FbApp.Models
 
         [Display(Name = "Edit your profile photo:")]
         public byte[] ProfilePhoto { get; set; }
+
+        [Display(Name = "Edit your profile privacy")]
+        public string Privacy { get; set; }
     }
 
     public class ManageLoginsViewModel

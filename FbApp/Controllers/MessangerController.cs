@@ -48,6 +48,6 @@ namespace FbApp.Controllers
             this.messangerService.Create(User.Identity.GetUserId(), id, model.MessageText);
             return RedirectToAction(nameof(Index), new { id, pageIndex });
         }
-
+       
     }
 }

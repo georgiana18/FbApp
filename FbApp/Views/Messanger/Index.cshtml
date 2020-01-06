@@ -21,6 +21,18 @@
                             <small>@m.SenderFullName - @m.DateSent</small>
                             <h5>@m.MessageText</h5>
                         </div>
+                        using (Html.BeginForm("Edit", "Message", new { id = @m.Id }, FormMethod.Get))
+                        {
+                            @Html.Hidden(m.MessageText)
+                            <button type="submit" class="btn btn-warning btn-sm col-sm-offset-1 col-sm-1" value="Edit">Edit</button>
+                        }
+
+                        using (Html.BeginForm("Delete", "Message", new { id = @m.Id }, FormMethod.Post))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button type="submit" class="btn btn-danger btn-sm col-sm-offset-1 col-sm-1" value="Delete">Delete</button>
+                        }
+
                     }
                     else
                     {

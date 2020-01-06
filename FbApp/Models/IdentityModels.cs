@@ -26,6 +26,8 @@ namespace FbApp.Models
 
         public bool IsDeleted { get; set; } = false;
 
+        public string Privacy { get; set; }
+
         public IEnumerable<Photo> Photos { get; set; } = new List<Photo>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
@@ -82,8 +84,6 @@ namespace FbApp.Models
         {
             return new ApplicationDbContext();
         }
-
-
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

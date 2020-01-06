@@ -177,6 +177,7 @@ namespace FbApp.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
+                    Privacy = "Private",
                     Age = model.Age,
                     ProfilePicture = imageData
                 };

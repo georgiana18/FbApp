@@ -6,6 +6,8 @@ namespace FbApp.Dtos
 {
     public class MessageModel
     {
+        public int Id { get; set; }
+
         public string SenderId { get; set; }
 
         public string MessageText { get; set; }

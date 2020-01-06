@@ -4,6 +4,8 @@ using FbApp.Services;
 using FbApp.Utilities;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 
 namespace FbApp.Controllers
@@ -46,7 +48,45 @@ namespace FbApp.Controllers
             this.commentService.Create(model.CommentText, User.Identity.GetUserId(), model.Id);
 
             return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId()});
+        }
 
+        public ActionResult Edit(int id)
+        {
+            if (!this.commentService.Exists(id))
+            {
+                throw new HttpException(404, "Not found"); 
+            }
+
+            var commentInfo = this.commentService.CommentById(id);
+
+            ViewData["CommentPhoto"] = commentInfo.UserProfilePicture;
+            
+            return View(commentInfo);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int id,  CommentModel model)
+        {
+            if(!this.commentService.UserIsAuthorizedToEdit(id, this.User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad Request");
+            }
+
+            this.commentService.Edit(id, model.Text);
+
+            return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(int id)
+        {
+            if(!this.commentService.UserIsAuthorizedToEdit(id, this.User.Identity.GetUserId()))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Bad Request");
+            }
+            this.commentService.Delete(id);
+
+            return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
         }
     }
 }

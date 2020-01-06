@@ -65,5 +65,7 @@ namespace FbApp.Services
             this.db.Messages.Add(message);
             this.db.SaveChanges();
         }
+
+        public bool UserIsAuthorizedToEdit(int messageId, string userId) => this.db.Messages.Any(p => p.Id == messageId && p.SenderId == userId);
     }
 }

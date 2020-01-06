@@ -99,6 +99,8 @@ namespace FbApp.Services
                 userAccountModel.Friends = friendModels;
                 userAccountModel.Posts = this.postService.PostsByUserId(userId);
 
+                userAccountModel.Privacy = user.Privacy;
+
                 return userAccountModel;
             }
             else

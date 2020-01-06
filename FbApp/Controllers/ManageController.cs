@@ -130,10 +130,10 @@ namespace FbApp.Controllers
                         user.LastName = edited_user.LastName;
                         user.Email = edited_user.Email;
                         user.Age = edited_user.Age;
-
+                        user.Privacy = edited_user.Privacy;
                         db.SaveChanges();
                         UserManager.Update(user);
-                        TempData["message"] = "Articolul a fost modificat!";
+                        TempData["message"] = "Userul a fost modificat!";
                     }
                     return RedirectToAction("Index");
                 }

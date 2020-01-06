@@ -24,6 +24,7 @@ namespace FbApp.Dtos
 
         public IEnumerable<UserListModel> Friends { get; set; } = new List<UserListModel>();
 
+        public string Privacy;
 
         public void ConfigureMapping(Profile profile)
         {

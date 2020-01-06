@@ -1,6 +1,7 @@
 ﻿
 @model List<FbApp.Dtos.CommentModel>
 @using FbApp.Utilities
+@using Microsoft.AspNet.Identity
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 @if (Model.Count <= 2)
@@ -17,6 +18,19 @@
                     @comment.Text
                 </div>
                 <div class="row"><small>@comment.Date.ToShortDateString()</small></div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        @if (comment.UserId == User.Identity.GetUserId())
+                        {
+                            <a href="/Comment/Edit/@comment.Id" class="btn btn-warning btn-sm">Edit</a>
+                            using (Html.BeginForm("Delete", "Comment", new { id = @comment.Id }, FormMethod.Post))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button type="submit" class="btn btn-danger btn-sm" value="Delete">Delete</button>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
         </div>
         <br />
@@ -36,6 +50,10 @@ else
                     @Model[i].Text
                 </div>
                 <div class="row"><small>@Model[i].Date.ToShortDateString()</small></div>
+                <div class="col-sm-4">
+                    <a href="/Comment/Edit/@Model[i].Id" class="btn btn-warning btn-sm">Edit</a>
+
+                </div>
             </div>
         </div>
         <br />
@@ -53,6 +71,10 @@ else
                         @Model[i].Text
                     </div>
                     <div class="row"><small>@Model[i].Date.ToShortDateString()</small></div>
+                    <div class="col-sm-4">
+                        <a href="/Comment/Edit/@Model[i].Id" class="btn btn-warning btn-sm">Edit</a>
+
+                    </div>
                 </div>
             </div>
             <br />
@@ -66,12 +88,14 @@ else
         <button id="hide" class="btn-group-sm btn-primary">Hide</button>
     </div>
 }
-<script>$(document).ready(function () {
+<script>
+    $(document).ready(function () {
         $("#hide").click(function () {
             $("#1").hide(500);
         });
     });</script>
-<script>$(document).ready(function () {
+<script>
+    $(document).ready(function () {
         $("#show").click(function () {
             $("#1").show(500);
         });
