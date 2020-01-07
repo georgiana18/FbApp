@@ -1,5 +1,6 @@
 ﻿using FbApp.Dtos;
 using FbApp.Services;
+using FbApp.Services.Implementation;
 using FbApp.Utilities;
 using Microsoft.AspNet.Identity;
 using System.IO;
@@ -12,20 +13,29 @@ namespace FbApp.Controllers
     public class PostsController : Controller
     {
         private readonly IPostService postService;
+        private readonly IAlbumService albumService;
 
         public PostsController()
         {
             this.postService = new PostService();
+            this.albumService = new AlbumService();
         }
 
-        public PostsController(IPostService postService)
+        public PostsController(IPostService postService, IAlbumService albumService)
         {
             this.postService = postService;
+            this.albumService = albumService;
         }
 
         public ActionResult Create()
         {
-            return View();
+            PostFormModel postFormModel = new PostFormModel();
+            if (albumService.AllAlbumsByUser(User.Identity.GetUserId()).Count == 0)
+            {
+                albumService.Create("Default Album", User.Identity.GetUserId(), "Your Default Album");
+            }
+            postFormModel.Albums = this.albumService.AlbumsByUserForDD(User.Identity.GetUserId());
+            return View(postFormModel);
         }
 
         [HttpPost]
@@ -47,8 +57,8 @@ namespace FbApp.Controllers
                 return View(model);
             }
 
-            this.postService.Create(this.User.Identity.GetUserId(), model.Feeling, model.Text, imageData);
-
+            int postId = this.postService.Create(this.User.Identity.GetUserId(), model.Feeling, model.Text, imageData, model.AlbumId);
+            this.albumService.AddPost(model.AlbumId, postId);
             return Redirect("/");
         }
 
@@ -70,6 +80,8 @@ namespace FbApp.Controllers
                 Feeling = postInfo.Feeling
             };
 
+            postFormModel.Albums = this.albumService.AlbumsByUserForDD(User.Identity.GetUserId());
+
             return View(postFormModel);
         }
 
@@ -90,7 +102,7 @@ namespace FbApp.Controllers
                 }
             }
 
-            this.postService.Edit(id, model.Feeling, model.Text, imageData);
+            this.postService.Edit(id, model.Feeling, model.Text, imageData, model.AlbumId);
 
             return RedirectToAction("AccountDetails", "Users", new { id = this.User.Identity.GetUserId() });
         }
@@ -109,8 +121,11 @@ namespace FbApp.Controllers
             var postFormModel = new PostFormModel
             {
                 Text = postInfo.Text,
-                Feeling = postInfo.Feeling
+                Feeling = postInfo.Feeling,
+                Photo = postInfo.Photo
             };
+
+            postFormModel.Albums = this.albumService.AlbumsByUserForDD(User.Identity.GetUserId());
 
             return View(postFormModel);
         }

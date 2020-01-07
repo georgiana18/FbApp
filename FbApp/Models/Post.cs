@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace FbApp.Models
 {
@@ -33,6 +34,12 @@ namespace FbApp.Models
         public string UserId { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+
+        public IEnumerable<SelectListItem> Albums { get; set; }
+
+        public virtual Album Album { get; set; }
+        
+        public int AlbumId { get; set; }
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }

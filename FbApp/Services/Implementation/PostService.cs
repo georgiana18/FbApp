@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FbApp.Dtos;
 using FbApp.Models;
+using FbApp.Services.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,12 +14,13 @@ namespace FbApp.Services
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         private readonly IPhotoService photoService = new PhotoService();
         private readonly ICommentService commentService = new CommentService();
+        private readonly IAlbumService albumService = new AlbumService();
 
         public PostService()
         {
         }
 
-        public void Create(string userId, Feeling feeling, string text, byte[] photo)
+        public int Create(string userId, Feeling feeling, string text, byte[] photo, int albumId)
         {
             var post = new Post
             {
@@ -27,11 +29,12 @@ namespace FbApp.Services
                 Text = text,
                 Likes = 0,
                 Date = DateTime.UtcNow,
-                Photo = photo ?? null
+                Photo = photo ?? null,
+                Album = db.Albums.Find(albumId)
             };
-
             db.Posts.Add(post);
             db.SaveChanges();
+            return post.Id;
         }
 
         public void Delete(int postId)
@@ -42,12 +45,16 @@ namespace FbApp.Services
             this.db.SaveChanges();
         }
 
-        public void Edit(int postId, Feeling feeling, string text, byte[] photo)
+        public void Edit(int postId, Feeling feeling, string text, byte[] photo, int albumId)
         {
             var post = this.db.Posts.Find(postId);
+            this.albumService.RemovePost(post.AlbumId, postId);
             post.Feeling = feeling;
             post.Text = text;
             post.Photo = photo ?? null;
+            post.AlbumId = albumId;
+            post.Album = db.Albums.Find(albumId);
+            this.albumService.AddPost(albumId, postId);
             this.db.SaveChanges();
         }
 

@@ -67,6 +67,7 @@ namespace FbApp.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+        public DbSet<Album> Albums { get; set; }
 
         public DbSet<Post> Posts { get; set; }
 
@@ -88,7 +89,7 @@ namespace FbApp.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+          
             //modelBuilder.Entity<Comment>().HasRequired(s => s.Post).WithMany(g => g.Comments).HasForeignKey(s => s.PostId);
         }
     }

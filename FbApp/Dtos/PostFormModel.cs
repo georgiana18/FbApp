@@ -1,6 +1,8 @@
 ﻿using FbApp.Models;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace FbApp.Dtos
 {
@@ -15,5 +17,9 @@ namespace FbApp.Dtos
 
         [Display(Name = "Upload a photo")]
         public byte[] Photo { get; set; }
+
+        public IEnumerable<SelectListItem> Albums { get; set; }
+
+        public int AlbumId { get; set; }
     }
 }

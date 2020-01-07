@@ -179,7 +179,7 @@ namespace FbApp.Controllers
                     LastName = model.LastName,
                     Privacy = "Private",
                     Age = model.Age,
-                    ProfilePicture = imageData
+                    ProfilePicture = imageData, 
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

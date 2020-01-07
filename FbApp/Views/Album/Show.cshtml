@@ -1,0 +1,73 @@
+﻿@model ICollection<FbApp.Models.Album>
+@using FbApp.Utilities
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Your albums:";
+}
+
+<hr />
+
+<h3 class="text-center">@ViewData["Title"]</h3>
+<div class="row">
+    <br />
+    <div class="col-sm-6 col-sm-offset-3">
+
+        @if (Model.Any())
+        {
+            foreach (var album in Model)
+            {
+
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            @if (album.Posts.Count > 0)
+                            {
+                                @album.Posts.Count
+                            }
+                            <img src="@album.Posts.ToArray()[0].Photo.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
+                        </div>
+                        <div class="col-sm-6 text-left">
+                            <div class="row">
+                                <strong>@album.Title</strong>
+                            </div>
+                            <div class="row">
+                                @album.Description
+                            </div>
+                        </div>
+                        <br /><hr />
+
+                        <div class="col-sm-8 btn-group">
+                            <a href="/Album/ShowAlbum/@album.Id" class="btn btn-success btn-sm"> Show </a>
+                            @if (album.UserId == User.Identity.GetUserId())
+                            {
+                                <a href="/Album/EditAlbumInfo/@album.Id" class="btn btn-warning btn-sm"> Edit </a>
+                                using (Html.BeginForm("Delete", "Album", new { id = @album.Id }, FormMethod.Post))
+                                {
+                                    @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                    <button type="submit" class="btn btn-danger btn-sm" value="Delete"> Delete </button>
+                                }
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2>
+                            You don't have any albums created yet.
+                            <br />
+                            Why not create one?
+                        </h2>
+                        <a class="btn btn-primary btn-sm" href="/Album/Create">Create album</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

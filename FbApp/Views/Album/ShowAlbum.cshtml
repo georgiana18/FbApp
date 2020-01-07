@@ -1,0 +1,97 @@
+﻿@model FbApp.Dtos.AlbumModel
+@using FbApp.Utilities;
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "ShowAlbum";
+}
+
+<h3 class="text-center">@Model.Title</h3>
+<br />
+<h5 class="text-center">@Model.Description</h5>
+<hr />
+@if (Model.UserId == User.Identity.GetUserId())
+{
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default text-left">
+                    <div class="panel-body">
+                        <p contenteditable="true">@(User.Identity.Name), add a new post to this album</p>
+                        <a class="btn btn-primary btn-sm" href="/Posts/Create">Create Post</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+
+        @if (Model.Posts.Any())
+        {
+            foreach (var post in Model.Posts)
+            {
+
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img src="@post.Photo.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
+                        </div>
+                        <div class="col-sm-10 text-left">
+                            <div class="row">
+                                <a href="/Users/AccountDetails/@post.Id">
+                                    <strong>@post.User.FirstName @post.User.LastName</strong>
+                                </a> is feeling @post.Feeling.ToString()
+                            </div>
+                            <div class="row"><small>@post.Date.ToShortDateString()</small></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>@post.Text</p>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(post.Photo.ToRenderablePictureString()))
+                    {
+
+                        <div class="row">
+                            <img src="@post.Photo.ToRenderablePictureString()" class="img-responsive" style="width: 100%" alt="Avatar">
+                        </div>
+
+                    }
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <a href="/Posts/Like/@post.Id" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                            </a>
+                            <a href="/Comment/Create/@post.Id" class="btn btn-default btn-sm">Comment</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <small>@post.Likes Likes / @post.Comments.Count() Comments</small>
+                        </div>
+                    </div>
+                    @if (post.Comments.Any())
+                    {
+                        <hr />
+                        @Html.Partial("_PostComments", post.Comments)
+                    }
+                </div>
+
+            }
+        }
+        else
+        {
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h3>This album does not have any posts.</h3>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

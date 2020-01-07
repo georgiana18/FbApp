@@ -6,9 +6,9 @@ namespace FbApp.Services
 {
     public interface IPostService
     {
-        void Create(string userId, Feeling feeling, string text, byte[] photo);
+        int Create(string userId, Feeling feeling, string text, byte[] photo, int albumId);
 
-        void Edit(int postId, Feeling feeling, string text, byte[] photo);
+        void Edit(int postId, Feeling feeling, string text, byte[] photo, int albumId);
 
         bool Exists(int id);
 

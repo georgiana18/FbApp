@@ -76,27 +76,24 @@
                 <option value="Public">Public</option>
             </select>
         }
+        <br />
+        <label class="col-md-2 control-label"> Password:</label>
+
+        if (Model.HasPassword)
+        {
+            @Html.ActionLink("Change your password", "ChangePassword")
+        }
+        else
+        {
+            @Html.ActionLink("Create", "SetPassword")
+        }
 
         <br />
+        <br />
         <button class="btn btn-sm btn-success">
-           Modifica Informatii Profil 
+            Modifica Informatii Profil
         </button>
     }
     <br />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
-            @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Create", "SetPassword")
-            }
-            ]
-        </dd>
-    </dl>
 
 </div>

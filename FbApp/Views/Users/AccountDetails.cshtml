@@ -13,7 +13,19 @@
             </p>
             <img src="@Model.ProfilePicture.ToRenderablePictureString()" class="img-circle" height="100" width="100" alt="ProfilePicture">
         </div>
-
+        @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.PublicAuthorization ||
+            ViewData[GlobalConstants.Authorization] == GlobalConstants.FriendAuthorization)
+        {
+            <div class="well">
+                <p><strong>Albums</strong></p>
+                <p>
+                    @*@Html.BeginForm("Show", "Album", new {)*@
+                    <a href="/Album/Show/@Model.Id">
+                        <strong>Go to list</strong>
+                    </a>
+                </p>
+            </div>
+        }
         @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization)
         {
             <div class="well">
@@ -46,6 +58,15 @@
                     </p>
                 }
             }
+            <div class="well">
+                <p><strong>Albums</strong></p>
+                <p>
+                    @*@Html.BeginForm("Show", "Album", new {)*@
+                    <a href="/Album/Show/@User.Identity.GetUserId()">
+                        <strong>Go to list</strong>
+                    </a>
+                </p>
+            </div>
         }
     </div>
     <div class="col-sm-6">
@@ -57,6 +78,16 @@
                         <div class="panel-body">
                             <p contenteditable="true">What do you think @(User.Identity.Name)?</p>
                             <a class="btn btn-primary btn-sm" href="/Posts/Create">Create Post</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default text-left">
+                        <div class="panel-body">
+                            <p contenteditable="true"> Do you want a new album?</p>
+                            <a class="btn btn-primary btn-sm" href="/Album/Create">Create album</a>
                         </div>
                     </div>
                 </div>
@@ -126,8 +157,9 @@
                                 <div class="row">
                                     <small>@post.Date.ToShortDateString()</small>
                                 </div>
-
-
+                                <div class="row">
+                                    <small>Album: @post.AlbumId</small>
+                                </div>
                             </div>
                         </div>
                         <div class="row">

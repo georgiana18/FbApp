@@ -30,6 +30,13 @@
         <input name="Photo" type="file" accept="image/*" class="form-control" />
         @Html.ValidationMessageFor(m => m.Photo, "", new { @class = "text-danger" })
     </div>
+    <div class="form-group">
+        @Html.Label("Album", "Select an album")
+
+        @Html.DropDownListFor(m => m.AlbumId, new SelectList(Model.Albums, "Value", "Text"),
+            "Your albums", new { @class = "form-control" })
+    </div>
+
     <div>
         <button type="submit" class="btn btn-primary col-md-offset-0">Submit</button>
         <button formaction='javascript:history.go(-1)' class="btn btn-default col-md-offset-0">Cancel</button>

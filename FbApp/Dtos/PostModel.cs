@@ -2,6 +2,7 @@
 using FbApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace FbApp.Dtos
 {
@@ -24,6 +25,10 @@ namespace FbApp.Dtos
         public string UserFullName { get; set; }
 
         public Feeling Feeling { get; set; }
+
+        public int AlbumId { get; set; }
+
+        public IEnumerable<SelectListItem> Albums { get; set; }
 
         public IEnumerable<CommentModel> Comments { get; set; } = new List<CommentModel>();
 
