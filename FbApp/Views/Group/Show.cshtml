@@ -1,0 +1,74 @@
+﻿@model IEnumerable<FbApp.Dtos.GroupModel>
+@using FbApp.Utilities
+@using Microsoft.AspNet.Identity
+
+
+@{
+    ViewBag.Title = "Your groups";
+}
+
+<hr />
+
+<h3 class="text-center">@ViewData["Title"]</h3>
+<div class="row">
+    <br />
+    <div class="col-sm-6 col-sm-offset-3">
+
+        @if (Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="well">
+                    <div class="row">
+                        <div class=" text-center">
+                            <div class="row">
+                                <strong>@item.Name</strong>
+                            </div>
+                            <hr />
+                            <div class="row text-left col-md-offset-1">
+                                @item.Description
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="text-center">
+                            @using (Html.BeginForm("ShowGroup", "Group", new { id = item.Id }, FormMethod.Get, new { style = "display: inline-block;" }))
+                            {
+                                <button type="submit" class="btn btn-success btn-sm" value="Show"> Show </button>
+                            }
+
+                            @using (Html.BeginForm("EditGroupInfo", "Group", new { id = item.Id }, FormMethod.Get, new { style = "display: inline-block;" }))
+                            {
+                                <button type="submit" class="btn btn-warning btn-sm" value="Edit"> Edit </button>
+                            }
+
+                            @using (Html.BeginForm("Delete", "Group", new { id = item.Id }, FormMethod.Post, new { style = "display: inline-block;" }))
+                            {
+                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                                <button type="submit" class="btn btn-danger btn-sm" value="Delete"> Delete </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <h2>
+                            You are not part of any groups yet.
+                            <br />
+                            Why not create one?
+                        </h2>
+                        <a class="btn btn-primary btn-sm" href="/Group/Create">Create a group</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+

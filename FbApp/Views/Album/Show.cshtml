@@ -24,20 +24,17 @@
                             @if (album.Posts.Count > 0)
                             {
                                 @album.Posts.Count
+                                <img src="@album.Posts.ToArray()[0].Photo.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
                             }
-                            <img src="@album.Posts.ToArray()[0].Photo.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
                         </div>
-                        <div class="col-sm-6 text-left">
-                            <div class="row">
-                                <strong>@album.Title</strong>
-                            </div>
-                            <div class="row">
-                                @album.Description
-                            </div>
+                        <div class="col-sm-4 col-sm-offset-1 text-left">
+                            <p><strong>@album.Title</strong></p>
+                            <p>@album.Description</p>
                         </div>
                         <br /><hr />
-
-                        <div class="col-sm-8 btn-group">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 btn-group text">
                             <a href="/Album/ShowAlbum/@album.Id" class="btn btn-success btn-sm"> Show </a>
                             @if (album.UserId == User.Identity.GetUserId())
                             {
@@ -49,8 +46,8 @@
                                 }
                             }
                         </div>
-
                     </div>
+
                 </div>
             }
         }

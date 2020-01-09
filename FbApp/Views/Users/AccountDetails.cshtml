@@ -92,6 +92,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default text-left">
+                        <div class="panel-body">
+                            <p contenteditable="true">Stay close to your friends:</p>
+                            <a class="btn btn-primary btn-sm" href="/Group/Create">Create a group</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
 
         @if (ViewData[GlobalConstants.Authorization] == GlobalConstants.FullAuthorization ||
@@ -299,6 +309,17 @@
                     }
                 </ul>
             </div>
+            <br>
+            <div class="well text-center">
+                <p><strong>My groups</strong></p>
+                <p>
+                    @*@Html.BeginForm("Show", "Album", new {)*@
+                    <a href="/Group/Show/@User.Identity.GetUserId()">
+                        <strong>Go to list</strong>
+                    </a>
+                </p>
+            </div>
+
         }
     </div>
 </div>

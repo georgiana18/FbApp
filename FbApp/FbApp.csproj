@@ -221,16 +221,22 @@
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\FriendRequestsController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\MessageGroupController.cs" />
     <Compile Include="Controllers\MessangerController.cs" />
+    <Compile Include="Controllers\MessangerGroupController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Dtos\AlbumModel.cs" />
     <Compile Include="Dtos\CommentModel.cs" />
+    <Compile Include="Dtos\GroupModel.cs" />
+    <Compile Include="Dtos\MessageGroupModel.cs" />
     <Compile Include="Dtos\MessageModel.cs" />
+    <Compile Include="Dtos\MessangerGroupModel.cs" />
     <Compile Include="Dtos\MessangerModel.cs" />
     <Compile Include="Dtos\PostCommentCreateModel.cs" />
     <Compile Include="Dtos\PostFormModel.cs" />
@@ -245,7 +251,9 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\MessageGroup.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\FriendRequest.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -255,12 +263,16 @@
     <Compile Include="Models\UserFriend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IAlbumService.cs" />
+    <Compile Include="Services\IGroupService.cs" />
+    <Compile Include="Services\IMessangerGroupService.cs" />
     <Compile Include="Services\IMessangerService.cs" />
     <Compile Include="Services\Implementation\AlbumService.cs" />
     <Compile Include="Services\Implementation\CommentService.cs" />
     <Compile Include="Services\Implementation\FriendRequestService.cs" />
     <Compile Include="Services\ICommentService.cs" />
     <Compile Include="Services\IFriendRequestService.cs" />
+    <Compile Include="Services\Implementation\GroupService.cs" />
+    <Compile Include="Services\Implementation\MessangerGroupService.cs" />
     <Compile Include="Services\Implementation\MessangerService.cs" />
     <Compile Include="Services\IPhotoService.cs" />
     <Compile Include="Services\IPostService.cs" />
@@ -351,6 +363,13 @@
     <Content Include="Views\Album\Show.cshtml" />
     <Content Include="Views\Album\ShowAlbum.cshtml" />
     <Content Include="Views\Album\EditAlbumInfo.cshtml" />
+    <Content Include="Views\Group\Create.cshtml" />
+    <Content Include="Views\Group\Show.cshtml" />
+    <Content Include="Views\Group\ShowGroup.cshtml" />
+    <Content Include="Views\MessangerGroup\Index.cshtml" />
+    <Content Include="Views\MessageGroup\Edit.cshtml" />
+    <Content Include="Views\Group\EditGroupInfo.cshtml" />
+    <Content Include="Views\Group\AddPeople.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

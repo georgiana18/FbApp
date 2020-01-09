@@ -16,7 +16,6 @@ namespace FbApp
             createAdminUserAndApplicationRoles();
         }
 
-
         private void createAdminUserAndApplicationRoles()
         {
             ApplicationDbContext context = new ApplicationDbContext();

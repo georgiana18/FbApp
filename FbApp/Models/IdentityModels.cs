@@ -46,6 +46,7 @@ namespace FbApp.Models
 
         public ICollection<UserFriend> OtherFriends { get; set; } = new List<UserFriend>();
 
+        public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
 
         public ApplicationUser() : base()
         {
@@ -80,6 +81,12 @@ namespace FbApp.Models
         public DbSet<UserFriend> UserFriends { get; set; }
 
         public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<MessageGroup> MessageGroups { get; set; }
+
+      //  public DbSet<ApplicationUser> Users { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -1,0 +1,65 @@
+﻿@model FbApp.Dtos.GroupModel
+@using FbApp.Utilities
+
+@{
+    ViewBag.Title = "ShowGroup";
+}
+
+<h2 class="text-center">@Html.DisplayFor(model => model.Name)</h2>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <hr />
+
+        <p class="text-center">
+            @Html.DisplayFor(model => model.Description)
+        </p>
+        <hr />
+        @using (Html.BeginForm("Index", "MessangerGroup", new { id = Model.Id }, FormMethod.Get))
+        {
+            <button type="submit" class="btn btn-success btn-lg btn-block" value="Index">Chat with your friends.</button>
+        }
+        <br>
+        @if (Model.Users.Any())
+        {
+            foreach (var user in Model.Users)
+            {
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img src="@user.ProfilePicture.ToRenderablePictureString()" class="img-circle pull-left" height="55" width="55" alt="Avatar">
+                        </div>
+                        <div class="col-sm-6 text-left">
+                            <div class="row">
+                                <a href="/Users/AccountDetails/@user.Id"><strong>@user.LastName  @user.FirstName</strong></a>
+                            </div>
+                            <div class="row">
+                                Age: @user.Age
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="row">
+            <div class="col-sm-6">
+                @using (Html.BeginForm("AddPeople", "Group", new { id = Model.Id }, FormMethod.Get))
+                {
+                    <button type="submit" class="btn btn-success btn-block" value="Index">Add more people to your group</button>
+                }
+            </div>
+            <div class="col-sm-6">
+                @using (Html.BeginForm("LeaveGroup", "Group", new { id = Model.Id }, FormMethod.Post))
+                {
+                    Html.HttpMethodOverride(HttpVerbs.Delete);
+                    <button type="submit" class="btn btn-danger btn-block col-sm-6" value="Index">Leave @Model.Name</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@*
+    - buton leave group
+    - back to group list
+    - chat message
+*@

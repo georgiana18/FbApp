@@ -1,0 +1,72 @@
+﻿@model FbApp.Dtos.MessangerGroupModel
+@using FbApp.Utilities
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewData["Title"] = "Messanger";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 well">
+            <h2 class="text-center">Messenger</h2>
+            @if (Model.Messages.Any())
+            {
+
+                foreach (var m in Model.Messages)
+                {
+                    if (m.SenderId == this.User.Identity.GetUserId())
+                    {
+                        <div class="well col-sm-offset-1 col-sm-8" style="background-color:lightskyblue">
+                            <small>@m.SenderFullName- @m.DateSent</small>
+                            <h5>@m.MessageText</h5>
+                        </div>
+                        using (Html.BeginForm("Edit", "MessageGroup", new { id = @m.Id }, FormMethod.Get))
+                        {
+                            @Html.Hidden(m.MessageText)
+                            <button type="submit" class="btn btn-warning btn-sm col-sm-offset-1 col-sm-1" value="Edit">Edit</button>
+                        }
+
+                        using (Html.BeginForm("Delete", "MessageGroup", new { id = @m.Id }, FormMethod.Post))
+                        {
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            <button type="submit" class="btn btn-danger btn-sm col-sm-offset-1 col-sm-1" value="Delete">Delete</button>
+                        }
+
+                    }
+                    else
+                    {
+                        <div class="well col-sm-offset-2 col-sm-8" style="background-color:aquamarine">
+                            <small>@m.SenderFullName- @m.DateSent</small>
+                            <h5>@m.MessageText</h5>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="col-sm-12 text-center text-uppercase">
+                    <p>
+                        <h5>Say hello to your friend in order to start chatting :)</h5>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+            <form method="post">
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.MessageText)
+                    @Html.TextAreaFor(m => m.MessageText, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.MessageText, "", new { @class = "text-danger" })
+
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+                <a href='javascript:history.go(-1)' class="btn btn-default">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
